@@ -3,6 +3,8 @@
     <body>
         <referenceContainer name="header-wrapper" remove="true"/>
         <referenceContainer name="header.panel.wrapper" remove="true" />
+        <referenceBlock name="navigation.sections" remove="true" />
+
         <!-- Override header template -->
         <referenceBlock name="header-content">
             <action method="setTemplate">
@@ -14,7 +16,6 @@
                 <argument name="template" xsi:type="string">Vendor_Theme::html/header/logo.phtml</argument>
             </action>
         </referenceBlock>
-        <referenceContainer name="page.top" remove="true" />
         <referenceBlock name="header.container">
             <action method="setTemplate">
                 <argument name="template" xsi:type="string">Vendor_Theme::html/header.phtml</argument>
@@ -61,6 +62,19 @@
             </block>
         </referenceContainer>
 
+        <referenceContainer name="page.top">
+            <container name="top.container" as="topContainer" label="After Page Header Top" htmlTag="div"/>
+        </referenceContainer>
+
+        <referenceContainer name="top.container">
+            <block class="Magento\Theme\Block\Html\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
+        </referenceContainer>
+
+        <referenceBlock name="breadcrumbs">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Vendor_Theme::html/breadcrumbs.phtml</argument>
+            </action>
+        </referenceBlock>
 
         <referenceBlock name="header-content">
             <block name="header.customer"
