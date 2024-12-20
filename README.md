@@ -1,5 +1,11 @@
 # Hyva header sharing to luma theme
 
+Sometimes project requires to have Hyva and Luma to share same header design, where Luma should have same styling/functionality as Hyva header has. Therefor this boilerplain code will help to inject Hyva header into Luma.
+
+## How it works
+
+Hyva and Luma uses different stack, i.e. Alpine.js vs Knockout.js & Require.js, but it is not a blocker to actually combine them, therefor easiest way is to just inject Alpine.js into Luma together with Header templates. Pretty straight forward.
+
 ## Setup
 
 - Move `app/code` to your Vendor/Theme module, where "Vendor" is your project name.
