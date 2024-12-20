@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @category  Umniah
+* @package   Umniah_Luma
+* @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+* @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+*/
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="css/styles.css"/>
+    </head>
+</page>

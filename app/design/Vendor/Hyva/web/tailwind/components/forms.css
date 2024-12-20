@@ -1,0 +1,121 @@
+.form-input,
+.form-email,
+.form-select,
+.form-multiselect,
+.form-textarea {
+    /* General properties for any form input */
+    /* font size, font-family, background color and etc*/
+
+    &:focus-visible {
+        /* Properties which defines behavior on input focus */
+    }
+
+    &:hover {
+        /* Hover properties */
+    }
+
+    &:disabled,
+    &[disabled] {
+        /* Disabled properties */
+
+        &::placeholder {
+            /* Disabled placeholder text properties */
+        }
+    }
+}
+
+.label {
+    /* Label properties, font-size, color and etc */
+}
+
+.required .label::after {
+    /* Applying required element start */
+    /* content: ' *';
+    @apply text-red-500; */
+}
+
+.checkbox,
+.radio {
+    /* General properties for checkbox and radio inputs  */
+
+    &:focus-visible {
+        /* Properties for focus on checkbox/radio */
+    }
+
+    &:hover {
+        /* Properties for hover on checkbox/radio */
+    }
+
+    &:disabled,
+    &[disabled] {
+        /* Properties for disabled checkbox/radio */
+    }
+
+    &:checked,
+    &[checked] {
+        /* General properties for checked radio/checkbox */
+
+        &:focus-visible {
+            /* Properties for focus on checked checkbox/radio */
+        }
+
+        &:hover {
+            /* Properties for focus on checked checkbox/radio */
+        }
+
+        &:disabled,
+        &[disabled] {
+            /* Properties for disabled on checked checkbox/radio */
+        }
+    }
+}
+
+.checkbox {
+    /* Specific checkbox general properties */
+}
+
+.radio {
+    /* Specific radio general properties */
+}
+
+/* This is used as custom selector, since native <select> tag is not possible to make as per design */
+.form-select {
+    @apply relative bg-none;
+
+    &-option {
+        /* Styling for option custom element */
+        @apply cursor-pointer;
+
+        &:hover {
+            /* Styling for option element hovering */
+        }
+
+        &-selected {
+            /* Styling for selected option */
+        }
+
+        &-disabled {
+            /* Styling for disabled option */
+            @apply pointer-events-none;
+        }
+    }
+
+    &-options-list {
+        /* Dropdown container styling */
+        @apply absolute z-[100] max-h-80 overflow-y-scroll w-full list-none bg-white;
+    }
+
+    &-wrapper {
+        /* Styling for select element wrapper */
+        @apply relative;
+
+        .chevron {
+            /* In case if chevron used, can style here. Also good to have animation of opening/closing */
+            @apply absolute top-3 right-4 transition-transform transform duration-300 ease-in-out pointer-events-none;
+
+            &-opened {
+                @apply rotate-180
+            }
+        }
+    }
+}

@@ -1,0 +1,39 @@
+<?php
+
+
+declare(strict_types=1);
+
+use Magento\Theme\Block\Html\Breadcrumbs;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Breadcrumbs $block */
+/** @var array[] $crumbs */
+
+?>
+<?php if ($crumbs && is_array($crumbs)): ?>
+    <nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
+        <div class="container">
+            <ol class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
+                <?php foreach ($crumbs as $crumbName => $crumbInfo): ?>
+                    <li class="item flex <?= $escaper->escapeHtmlAttr($crumbName) ?>">
+                        <?php if (!$crumbInfo['first']): ?>
+                            <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
+                        <?php endif; ?>
+                        <?php if ($crumbInfo['link']): ?>
+                            <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
+                                class="no-underline"
+                                title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>"><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
+                        <?php elseif ($crumbInfo['last']): ?>
+                            <span
+                                class="text-primary-lighter"
+                                aria-current="page"><?= $escaper->escapeHtml($crumbInfo['label']) ?></span>
+                        <?php else: ?>
+                            <?= $escaper->escapeHtml($crumbInfo['label']) ?>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        </div>
+    </nav>
+<?php endif; ?>

@@ -1,0 +1,114 @@
+<?php
+
+
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\Navigation;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Navigation $viewModelNavigation */
+$viewModelNavigation = $viewModels->require(Navigation::class, $block);
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+$uniqueId = '_' . uniqid();
+
+// Order is important here: 1. build the menu data, 2. then set the cache tags from the view model identities
+$menuItems = $viewModelNavigation->getNavigation(4);
+$block->setData('cache_tags', $viewModelNavigation->getIdentities());
+
+?>
+<div x-data="initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>()"
+    class="z-20 order-2 sm:order-1 lg:order-2 hidden lg:flex">
+    <!-- desktop -->
+    <div x-ref="nav-desktop"
+        @load.window="setActiveMenu($root)"
+        class="hidden lg:block lg:px-8">
+        <nav
+            class="relative"
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Main menu')) ?>">
+            <ul class="flex justify-start flex-wrap gap-x-7 py-4">
+                <?php foreach ($menuItems as $index => $menuItem): ?>
+                    <li class="relative level-0 border-b-2 border-transparent hover:border-primary data-[active]:border-primary"
+                        @mouseenter="hoverPanelActiveId = '<?= /* @noEscape */ (string) $index ?>'"
+                        @mouseleave="hoverPanelActiveId = 0"
+                        @keyup.escape="hoverPanelActiveId = 0">
+                        <span class="flex items-center text-md">
+                            <a class="w-full text-base text-gray-700 level-0 py-2 px-0.5"
+                                href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                                title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
+                                @focus="hoverPanelActiveId = 0">
+                                <?= $escaper->escapeHtml($menuItem['name']) ?>
+                            </a>
+                            <?php if (!empty($menuItem['childData'])): ?>
+                                <button
+                                    type="button"
+                                    data-sr-button-id="<?= $escaper->escapeHtmlAttr($index) ?>"
+                                    :aria-expanded="hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>' ? 'true' : 'false'"
+                                    @click="openMenuOnClick('<?= /* @noEscape */ (string) $index ?>')"
+                                    class="rounded p-1 text-gray-500">
+                                    <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5", 25, 25, ['aria-hidden' => 'true']) ?>
+                                    <span class="sr-only">
+                                        <?= $escaper->escapeHtml(__('Show submenu for %1 category', $menuItem['name'])) ?>
+                                    </span>
+                                </button>
+                            <?php endif; ?>
+                        </span>
+                        <?php if (!empty($menuItem['childData'])): ?>
+                            <ul
+                                class="absolute top-full z-10 hidden px-6 py-4 mt-0.5 -ml-6 shadow-lg bg-container-lighter/95"
+                                :class="{
+                                    'hidden' : hoverPanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
+                                    'block' : hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'
+                                }">
+                                <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                                    <li>
+                                        <a href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                                            title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
+                                            class="block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline aria-[current=page]:underline"
+                                            @keyup.escape="$nextTick(() => document.querySelector('[data-sr-button-id=<?= $escaper->escapeJs($index) ?>]').focus())">
+                                            <span class="text-base text-gray-700">
+                                                <?= $escaper->escapeHtml($subMenuItem['name']) ?>
+                                            </span>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </nav>
+    </div>
+</div>
+<script>
+    'use strict';
+
+    const initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?> = () => {
+        return {
+            hoverPanelActiveId: null,
+            setActiveMenu(menuNode) {
+                Array.from(menuNode.querySelectorAll('a')).filter(link => {
+                    return link.href === window.location.href.split('?')[0];
+                }).map(item => {
+                    item.setAttribute('aria-current', 'page');
+                    item.closest('li.level-0').setAttribute('data-active', 'true');
+                });
+            },
+            openMenuOnClick(menuNode) {
+                if (menuNode === this.hoverPanelActiveId) {
+                    this.hoverPanelActiveId = 0;
+                } else {
+                    this.hoverPanelActiveId = menuNode
+                }
+            }
+        }
+    }
+</script>

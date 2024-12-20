@@ -1,0 +1,16 @@
+<?php
+
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\BlockCache;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var BlockCache $blockCacheViewModel */
+$blockCacheViewModel = $viewModels->require(BlockCache::class);
+
+echo $block->getChildHtml();
+
+// Copy child cache tags to this block so they are added to the block_html cache record
+$block->setData('cache_tags', $blockCacheViewModel->collectBlockChildrenCacheTags($block));

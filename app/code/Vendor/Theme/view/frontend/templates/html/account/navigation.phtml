@@ -1,0 +1,21 @@
+<?php
+
+
+use Magento\Framework\View\Element\Html\Links;
+use Magento\Framework\Escaper;
+
+/** @var Links $block */
+/** @var Escaper $escaper */
+?>
+<div class="block account-nav">
+    <div class="title">
+        <strong><?= $escaper->escapeHtml(__('My Account')) ?></strong>
+    </div>
+    <div class="content">
+        <nav class="account-nav">
+            <ul class="nav items">
+                <?= $block->getChildHtml() ?>
+            </ul>
+        </nav>
+    </div>
+</div>

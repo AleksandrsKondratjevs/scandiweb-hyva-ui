@@ -1,0 +1,53 @@
+<?php
+
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Theme\Block\Html\Header\Logo;
+use Hyva\Theme\ViewModel\Logo\LogoSizeResolver;
+
+/** @var Logo $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var LogoSizeResolver $logoSizeResolver */
+
+$storeName = $block->getThemeName();
+
+$logoSizeResolver = $viewModels->require(LogoSizeResolver::class);
+$logoWidth = $logoSizeResolver && $logoSizeResolver->getWidth()
+    ? $logoSizeResolver->getWidth()
+    : $block->getLogoWidth();
+$logoHeight = $logoSizeResolver && $logoSizeResolver->getHeight()
+    ? $logoSizeResolver->getHeight()
+    : $block->getLogoHeight();
+
+/** @var \Hyva\Theme\ViewModel\Logo\LogoPathResolver $logoPathResolver */
+$logoPathResolver = $block->getData('logoPathResolver');
+$logoSrc = $logoPathResolver && method_exists($logoPathResolver, 'getLogoSrc')
+    ? $logoPathResolver->getLogoSrc($block->getData('logo_file'))
+    : $block->getLogoSrc();
+?>
+<div class="order-1 sm:order-2 lg:order-1 w-full pb-2 sm:w-auto sm:pb-0">
+    <a
+        class="flex items-center justify-center text-xl font-medium tracking-wide text-gray-800
+            no-underline hover:no-underline font-title"
+        href="<?= $escaper->escapeUrl($block->getUrl('')) ?>"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Go to Home page')) ?>">
+        <img
+            src="<?= $escaper->escapeUrl($logoSrc) ?>"
+            alt="<?= $escaper->escapeHtmlAttr($block->getLogoAlt() ? $block->getLogoAlt() : __('Store logo')) ?>"
+            <?= $logoWidth
+                ? 'width="' . $escaper->escapeHtmlAttr($logoWidth) . '"'
+                : 'width="200"'
+            ?>
+            <?= $logoHeight
+                ? 'height="' . $escaper->escapeHtmlAttr($logoHeight) . '"'
+                : 'height="150"'
+            ?> />
+        <?php if (!$logoSrc): ?>
+            <?= $escaper->escapeHtml($storeName) ?>
+        <?php endif; ?>
+    </a>
+</div>
