@@ -1,0 +1,54 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Framework\Escaper;
+use Hyva\Theme\Model\LocaleFormatter;
+
+/** @var Toolbar $block */
+/** @var Escaper $escaper */
+/** @var LocaleFormatter $localeFormatter */
+
+$availableLimitOptions = $block->getAvailableLimit();
+
+?>
+
+<?php if (count($availableLimitOptions) > 1): ?>
+    <div class="field limiter flex items-center order-3 sm:order-2 md:order-3 lg:order-2 col-span-2 justify-end">
+        <div class="control">
+            <span aria-hidden="true"><?= $escaper->escapeHtml((string)__('Show')) ?></span>
+
+            <!-- Next lines changed to implement custom dropdown -->
+            <?php
+                $selectOptions = [];
+
+                foreach ($block->getAvailableLimit() as $key => $limit) {
+                    $label = is_numeric($limit) ? $localeFormatter->formatNumber((int) $limit) : $limit;
+
+                    $selectOptions[] = [
+                        'value' => $key,
+                        'label' => $label
+                    ];
+
+                    if ($block->isLimitCurrent($key)) {
+                        $defaultValue = $key;
+                    }
+                }
+            ?>
+            <?=
+                $this->getLayout()
+                ->createBlock('Magento\Framework\View\Element\Template')
+                ->setTemplate('Hyva_Theme::ui/dropdown.phtml')
+                ->setData('select_classes', 'form-select limiter-options')
+                ->setData('options', $selectOptions)
+                ->setData('default', $defaultValue)
+                ->setData('on_change', "changeUrl('product_list_limit', selectedOptionValue, options.limitDefault)")
+                ->toHtml();
+            ?>
+        </div>
+    </div>
+<?php else: ?>
+    <div class="field limiter flex order-3 sm:order-2 md:order-3 lg:order-2 col-span-2 justify-end">
+
+    </div>
+<?php endif;

@@ -1,0 +1,260 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_StyleGuide
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+
+/** @var HeroiconsSolid $heroiconssolid */
+$heroiconssolid = $viewModels->require(HeroiconsSolid::class);
+?>
+<div aria-labelledby="block-customer-login-heading">
+    <form autocomplete="off" class="form form-login" action="<?= $escaper->escapeUrl($block->getPostActionUrl()) ?>"
+        method="post">
+        <fieldset class="fieldset flex flex-col gap-2">
+            <legend>
+                <h2><?= __('Legend') ?></h2>
+            </legend>
+            <div class="field">
+                <label class="label" for="input"><span><?= __('Input') ?></span></label>
+                <div class="control">
+                    <input name="login[username]" class="form-input"
+                        id="input"
+                        style="min-width: 320px;" />
+                </div>
+            </div>
+            <div class="field required">
+                <label class="label" for="input-0"><span><?= __('Input required') ?></span></label>
+                <div class="control">
+                    <input name="login[username]" class="form-input" required
+                        id="input-0"
+                        style="min-width: 320px;" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="input-1"><span><?= __('Input placeholder') ?></span></label>
+                <div class="control">
+                    <input name="login[username]" class="form-input"
+                        id="input-1"
+                        style="min-width: 320px;" placeholder="Placeholder" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="input-2"><span><?= __('Input disabled') ?></span></label>
+                <div class="control">
+                    <input name="login[username]" class="form-input"
+                        id="input-2" disabled
+                        style="min-width: 320px;" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="input-5"><span><?= __('Input disabled placeholder') ?></span></label>
+                <div class="control">
+                    <input name="login[username]" class="form-input"
+                        id="input-5" disabled
+                        style="min-width: 320px;" placeholder="Placeholder" />
+                </div>
+            </div>
+            <div class="field field-hint">
+                <label class="label" for="input-4"><span><?= __('Input hint') ?></span></label>
+                <div class="control">
+                    <input name="login[username]" class="form-input form-input-icon"
+                        value="<?= $escaper->escapeHtmlAttr($block->getUsername()) ?>" id="input-4"
+                        style="min-width: 320px;" />
+                </div>
+                <ul class="messages">
+                    <li><?= __('Hint message') ?></li>
+                </ul>
+            </div>
+            <div class="field field-reserved field-error">
+                <label class="label" for="input-3"><span><?= __('Input error') ?></span></label>
+                <div class="control">
+                    <div class="relative w-max">
+                        <input name="login[username]" class="form-input form-input-icon" required
+                            value="<?= $escaper->escapeHtmlAttr($block->getUsername()) ?>" id="input-3"
+                            style="min-width: 320px;" autocomplete="false" />
+                    </div>
+                </div>
+                <ul class="messages">
+                    <li><?= __('Error message') ?></li>
+                </ul>
+            </div>
+            <hr class="my-4" />
+            <div class="field">
+                <label for="pass" class="label">
+                    <span><?= __('Password') ?></span>
+                </label>
+                <div class="control flex items-center" x-data="{ showPassword: false }">
+                    <input name="login[password]" class="form-input" required
+                        :type="showPassword ? 'text' : 'password'" id="pass" autocomplete="off"
+                        title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>" style="min-width: 320px;" />
+                    <button
+                        type="button"
+                        x-on:click="showPassword = !showPassword"
+                        :aria-pressed="showPassword ? 'true' : 'false'"
+                        class="px-4 py-3"
+                        :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'">
+                        <template x-if="!showPassword">
+                            <?= $heroiconssolid->eyeHtml('w-5 h-5'); ?>
+                        </template>
+                        <template x-if="showPassword">
+                            <?= $heroiconssolid->eyeOffHtml('w-5 h-5'); ?>
+                        </template>
+                    </button>
+                </div>
+            </div>
+            <div class="field">
+                <label for="pass-1" class="label">
+                    <span><?= __('Password disabled') ?></span>
+                </label>
+                <div class="control flex items-center" x-data="{ showPassword: false }">
+                    <input name="login[password]" class="form-input" required
+                        :type="showPassword ? 'text' : 'password'" id="pass-1" disabled autocomplete="off"
+                        title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>" style="min-width: 320px;" />
+                    <button
+                        type="button"
+                        disabled
+                        x-on:click="showPassword = !showPassword"
+                        :aria-pressed="showPassword ? 'true' : 'false'"
+                        class="px-4 py-3"
+                        :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'">
+                        <template x-if="!showPassword">
+                            <?= $heroiconssolid->eyeHtml('w-5 h-5'); ?>
+                        </template>
+                        <template x-if="showPassword">
+                            <?= $heroiconssolid->eyeOffHtml('w-5 h-5'); ?>
+                        </template>
+                    </button>
+                </div>
+            </div>
+            <hr class="my-4" />
+            <div class="field">
+                <?=
+                $this->getLayout()
+                    ->createBlock('Magento\Framework\View\Element\Template')
+                    ->setTemplate('Hyva_Theme::ui/dropdown.phtml')
+                    ->setData('label', 'Country')
+                    ->setData('id', 'select-id')
+                    ->setData('name', 'select-name')
+                    ->setData('options', [
+                        [
+                            'value' => 'option-1',
+                            'label' => 'Option 1',
+                        ],
+                        [
+                            'value' => 'option-2',
+                            'label' => 'Option 2 disabled',
+                            'disabled' => true
+                        ],
+                        [
+                            'value' => 'option-3',
+                            'label' => 'Option 3',
+                        ]
+                    ])
+                    ->setData('placeholder', 'Select country...')
+                    ->setData('is_required', true)
+                    ->setData('css_class', 'max-w-96')
+                    ->toHtml();
+                ?>
+            </div>
+            <div class="field">
+                <?=
+                $this->getLayout()
+                    ->createBlock('Magento\Framework\View\Element\Template')
+                    ->setTemplate('Hyva_Theme::ui/dropdown.phtml')
+                    ->setData('label', 'Country')
+                    ->setData('id', 'select-id-2')
+                    ->setData('name', 'select-name')
+                    ->setData('options', [
+                        [
+                            'value' => 'option-1',
+                            'label' => 'Option 1',
+                        ],
+                        [
+                            'value' => 'option-2',
+                            'label' => 'Option 2 disabled',
+                            'disabled' => true
+                        ],
+                        [
+                            'value' => 'option-3',
+                            'label' => 'Option 3',
+                        ]
+                    ])
+                    ->setData('placeholder', 'Select country...')
+                    ->setData('is_required', true)
+                    ->setData('css_class', 'max-w-96')
+                    ->toHtml();
+                ?>
+            </div>
+            <hr class="my-4" />
+            <div class="field choice">
+                <input type="checkbox" name="checkbox-1" id="checkbox-1" value="1" title="Checkbox"
+                    class="checkbox">
+                <label for="checkbox-1" class="label"><?= __('Checkbox') ?></label>
+            </div>
+            <div class="field choice">
+                <input type="checkbox" name="checkbox-2" id="checkbox-2" value="1" title="Checkbox"
+                    class="checkbox" checked>
+                <label for="checkbox-2" class="label"><?= __('Checkbox checked') ?></label>
+            </div>
+            <div class="field choice">
+                <input type="checkbox" name="checkbox-3" id="checkbox-3" value="1" title="Checkbox"
+                    class="checkbox" disabled>
+                <label for="checkbox-3" class="label"><?= __('Checkbox disabled') ?></label>
+            </div>
+            <div class="field choice">
+                <input type="checkbox" name="checkbox-4" id="checkbox-4" value="1" title="Checkbox"
+                    class="checkbox" disabled checked>
+                <label for="checkbox-4" class="label"><?= __('Checkbox checked disabled') ?></label>
+            </div>
+            <div class="field field-reserved field-error choice">
+                <input type="checkbox" name="checkbox-4" id="checkbox-4" value="1" title="Checkbox"
+                    class="checkbox">
+                <label for="checkbox-4" class="label"><?= __('Checkbox error') ?></label>
+                <ul class="messages">
+                    <li><?= __('Error message') ?></li>
+                </ul>
+            </div>
+            <hr class="my-4" />
+            <div class="field choice pt-3">
+                <input type="radio" id="radio-test" name="radio-test" class="radio" />
+                <label class="label" for="radio-test">
+                    <?= __('Radio') ?>
+                </label>
+            </div>
+            <div class="field choice">
+                <input type="radio" id="radio-test-2" name="radio-test-2" class="radio" checked="true" />
+                <label class="label" for="radio-test-2">
+                    <?= __('Radio checked') ?>
+                </label>
+            </div>
+            <div class="field choice">
+                <input type="radio" id="radio-test-3" name="radio-test-3" class="radio" disabled />
+                <label class="label" for="radio-test-3">
+                    <?= __('Radio disabled') ?>
+                </label>
+            </div>
+            <div class="field choice">
+                <input type="radio" id="radio-test-4" name="radio-test-4" class="radio" checked="true" disabled />
+                <label class="label" for="radio-test-4">
+                    <?= __('Radio checked disabled') ?>
+                </label>
+            </div>
+            <div class="field field-reserved field-error choice">
+                <input type="radio" name="radio-5" id="radio-5" value="1" title="radio"
+                    class="radio">
+                <label for="radio-5" class="label"><?= __('Radio error') ?></label>
+                <ul class="messages">
+                    <li><?= __('Error message') ?></li>
+                </ul>
+            </div>
+        </fieldset>
+    </form>
+</div>

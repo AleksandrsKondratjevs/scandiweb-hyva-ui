@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_StyleGuide
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+declare(strict_types=1);
+
+/** @var \Scandiweb\StyleGuide\Block\Section $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<h4 class="py-5">Click on button and message will appear for 10sec</h4>
+<div x-data="{}"class="flex gap-3">
+    <button
+        class="btn btn-primary bg-green-500 hover:bg-green-500"
+        @click="window.dispatchMessages([
+            {
+                type: 'success',
+                text: 'Use color to accentuate the message.'
+            }
+        ], 10000)">
+        <span><?= __('Success') ?></span>
+    </button>
+    <button
+        class="btn btn-primary bg-yellow-300 hover:bg-yellow-300"
+        @click="window.dispatchMessages([
+            {
+                type: 'warning',
+                text: 'Use color to accentuate the message.'
+            }
+        ], 10000)">
+        <span><?= __('Warning') ?></span>
+    </button>
+    <button
+        class="btn btn-primary bg-red-500 hover:bg-red-500"
+        @click="window.dispatchMessages([
+            {
+                type: 'error',
+                text: 'Use color to accentuate the message.'
+            }
+        ], 10000)">
+        <span><?= __('Error') ?></span>
+    </button>
+</div>

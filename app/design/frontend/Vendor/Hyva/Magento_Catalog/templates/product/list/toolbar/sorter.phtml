@@ -1,0 +1,62 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Framework\Escaper;
+
+/** @var Toolbar $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+<div class="toolbar-sorter sorter flex items-center order-1 col-span-3 sm:col-span-6
+        md:col-span-3 lg:col-span-6 justify-end">
+        <!-- Next lines changed to implement custom dropdown -->
+        <div class="field">
+            <?php
+                $options = [];
+
+                foreach ($block->getAvailableOrders() as $orderCode => $orderLabel) {
+                    $options[] = [
+                        'value' => $orderCode,
+                        'label' => __($orderLabel)
+                    ];
+
+                    if ($block->isOrderCurrent($orderCode)) {
+                        $currentCode = $orderCode;
+                    }
+                }
+            ?>
+            <?=
+                $this->getLayout()
+                ->createBlock('Magento\Framework\View\Element\Template')
+                ->setTemplate('Hyva_Theme::ui/dropdown.phtml')
+                ->setData('id', 'sorter')
+                ->setData('options', $options)
+                ->setData('default', $currentCode)
+                ->setData('on_change', "changeUrl('product_list_order', selectedOptionValue, options.orderDefault)")
+                ->toHtml();
+            ?>
+        </div>
+    <?php if ($block->getCurrentDirection() == 'desc'): ?>
+        <a title="<?= $escaper->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
+           href="#"
+           class="action sorter-action sort-desc"
+           @click.prevent="changeUrl('product_list_dir', 'asc', options.directionDefault)"
+        >
+            <?= $heroicons->sortAscendingHtml(); ?>
+        </a>
+    <?php else: ?>
+        <a title="<?= $escaper->escapeHtmlAttr(__('Set Descending Direction')) ?>"
+           href="#"
+           class="action sorter-action sort-asc"
+           @click.prevent="changeUrl('product_list_dir', 'desc', options.directionDefault)"
+        >
+            <?= $heroicons->sortDescendingHtml(); ?>
+        </a>
+    <?php endif; ?>
+</div>

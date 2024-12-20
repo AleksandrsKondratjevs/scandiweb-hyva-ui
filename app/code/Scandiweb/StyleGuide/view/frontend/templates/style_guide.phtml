@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_StyleGuide
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Scandiweb\StyleGuide\ViewModel\SectionBlocksProvider $viewModel */
+$viewModel = $block->getData('view_model');
+$sectionBlocks = $viewModel->getSectionBlocks();
+?>
+<div class="style-guide-container">
+    <dl class="grid grid-cols-1 gap-10 lg:grid-cols-[150px,_1fr] lg:gap-[50px]">
+        <?php foreach ($sectionBlocks as $block): ?>
+            <?php $html = trim($block->toHtml()); ?>
+            <?php if ($html): ?>
+                <dt class="my-3 text-black font-bold text-xl text-center lg:text-left" style="flex: 1;"><?= $escaper->escapeHtml($block->getTitle()); ?></dt>
+                <dd style="flex: 2;">
+                    <?= $block->toHtml() ?>
+                </dd>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </dl>
+</div>

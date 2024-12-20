@@ -1,0 +1,34 @@
+<script>
+    function initDeviceTypeVariable() {
+        const mobileMatchMedia = window.matchMedia("(max-width: 1023px)");
+
+        function onChangeMedia(mediaQuery) {
+            if (window.isMobile !== mediaQuery.matches) {
+                const isMobile = mediaQuery.matches;
+
+                window.isMobile = isMobile;
+                Alpine.store('device').isMobile = isMobile;
+            }
+        }
+
+        onChangeMedia(mobileMatchMedia);
+
+        if (typeof mobileMatchMedia.onchange !== 'object') {
+            // prevent an old iOS Safari bug where addEventListener does not accept an event type parameter
+            mobileMatchMedia.addListener((event) => onChangeMedia(event));
+        } else {
+            mobileMatchMedia.addEventListener(
+                "change",
+                (event) => onChangeMedia(event)
+            )
+        }
+    }
+
+    document.addEventListener("alpine:init", () => {
+        Alpine.store('device', {
+            isMobile: window.isMobile
+        });
+
+        initDeviceTypeVariable();
+    });
+</script>

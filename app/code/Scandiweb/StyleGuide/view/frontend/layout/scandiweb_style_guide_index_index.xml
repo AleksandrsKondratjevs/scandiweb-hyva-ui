@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_StyleGuide
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block name="scandiweb.style_guide" template="Scandiweb_StyleGuide::style_guide.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Scandiweb\StyleGuide\ViewModel\SectionBlocksProvider</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

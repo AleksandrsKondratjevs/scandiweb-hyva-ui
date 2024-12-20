@@ -1,0 +1,170 @@
+<?php
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\SvgIcons;
+
+/** @var SvgIcons $hyvaicons */
+$hyvaicons = $viewModels->require(SvgIcons::class);
+
+$uniqueId = uniqid('_');
+
+/**
+ * $label - label for input, if no provide, will not render
+ * $name - name for select input, incase if not provided, will fallback to id.
+ * $id - id for select input
+ * $defaultValue - default option selected, if no, fallback to placeholder
+ * $placeholder - Used as placeholder for select input, like 'Select option'.
+ * $onChange - Custom function will be executed on select input change, used in cases when need to select country.
+ */
+
+/**
+ * Options structure:
+ * [
+ *  [
+ *   'value' => Input value
+ *   'label' => Input label
+ *   'disabled' => true|false
+ *   'customAttributes' => [
+ *    'attribute name' => value
+ *   ]
+ *  ]
+ * ]
+ */
+
+$label = $block->getLabel();
+$id = $block->getId() ?? $uniqueId;
+$name = $block->getName() ?? $id;
+$ref = $block->getRef() ?? 'select';
+$options = $block->getOptions();
+$defaultValue = $block->getDefault() ?? $options[0]['value'];
+$placeholder = $block->getPlaceholder();
+$onChange = $block->getOnChange();
+$cssClass = $block->getCssClass();
+
+?>
+
+<script>
+    function initDropdown<?=
+                            /** @noEscape */
+                            $uniqueId ?>() {
+        return {
+            isOpen: false,
+            selectedOptionValue: '<?= $placeholder ? '' : $defaultValue ?? $options[0]['value'] ?>',
+            activeIndex: -1,
+            handleOptionSelect(value) {
+                this.isOpen = false;
+                this.selectedOptionValue = value;
+                this.$refs['<?= $ref ?>'].value = value;
+                this.$refs['<?= $ref ?>'].dispatchEvent(new Event('change'));
+            },
+            select() {
+                const selectedOption = this.$refs.dropdown.getElementsByClassName('form-select-option-selected');
+
+                if (!Array.from(selectedOption).length) {
+                    return;
+                }
+
+                this.$refs.dropdown.scrollTo(0, selectedOption[0].offsetTop);
+            },
+            init() {
+                this.$watch('isOpen', value => {
+                    if (!value) {
+                        this.activeIndex = -1;
+                    } else {
+                        this.$nextTick(() => {
+                            this.$refs['<?= $ref ?>'].focus();
+                            this.select();
+                        });
+                    }
+                });
+            }
+        }
+    }
+</script>
+
+<?php if ($label): ?>
+    <label class="label" for="<?= $id ?>" @click="$event.preventDefault();">
+        <span>
+            <?= $label ?>
+        </span>
+    </label>
+<?php endif; ?>
+<div class="control <?= $cssClass ?>">
+    <div x-data="initDropdown<?=
+                                /** @noEscape */
+                                $uniqueId ?>()" class="form-select-wrapper">
+        <select
+            class="form-select w-full"
+            :class="{ 'rounded-b-none border-secondary': !$store.device.isMobile && isOpen, 'form-select-placeholder-value': selectedOptionValue === '' }"
+            @mousedown="!$store.device.isMobile ? $event.preventDefault() : null"
+            @click="!$store.device.isMobile ? (isOpen = !isOpen) : null"
+            @mouseup="!$store.device.isMobile ? $event.preventDefault() : null"
+            x-model="selectedOptionValue"
+            @keydown="select()"
+            @keydown.enter.prevent="isOpen = false"
+            x-ref="<?= $ref ?>"
+            id="<?= $id ?>"
+            name="<?= $name ?>"
+            <?php if ($onChange): ?>
+            @change.debounce="<?= $onChange ?>"
+            <?php endif; ?>>
+            <?php if ($placeholder): ?>
+                <option hidden>
+                    <?= $placeholder ?>
+                </option>
+            <?php endif; ?>
+            <?php foreach ($options as $option): ?>
+                <?php
+                $optionValue = $option['value'];
+                $isDisabled = empty($option['disabled']) ? false : $option['disabled'];
+                $optionLabel = $option['label'];
+                ?>
+                <option
+                    <?php if ($isDisabled): ?>
+                    disabled
+                    <?php endif; ?>
+                    value="<?= $optionValue ?>"
+                    <?php if (isset($option['customAttributes'])): ?>
+                    <?php foreach ($option['customAttributes'] as $key => $value): ?>
+                    <?= $key ?>="<?= $value ?>"
+                    <?php endforeach; ?>
+                    <?php endif; ?>>
+                    <?= $optionLabel ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <div class="chevron" :class="{ 'chevron-opened': isOpen }">
+            <!-- Change to your chevron or custom icon -->
+            <?= $hyvaicons->renderHtml('chevron', '', 14, 14) ?>
+        </div>
+        <ul
+            x-cloak
+            x-show="isOpen"
+            @click.away="isOpen = false"
+            class="form-select-options-list"
+            tabindex="0"
+            x-ref="dropdown">
+            <?php foreach ($options as $key => $option): ?>
+                <?php
+                $optionValue = $option['value'];
+                $isDisabled = empty($option['disabled']) ? false : $option['disabled'];
+                $optionLabel = $option['label'];
+                ?>
+                <li
+                    @click="handleOptionSelect('<?= $optionValue ?>');"
+                    :class="{ 'form-select-option-selected': selectedOptionValue === '<?= $optionValue ?>' }"
+                    class="form-select-option <?= !$isDisabled ?: 'form-select-option-disabled' ?>"
+                    value="<?= $optionValue ?>"
+                    id="<?= $optionValue ?>"
+                    :tabindex="<?= $key ?>"
+                    :key="<?= $key ?>"
+                    <?php if ($isDisabled): ?>
+                    disabled
+                    <?php endif; ?>>
+                    <?= $optionLabel ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>

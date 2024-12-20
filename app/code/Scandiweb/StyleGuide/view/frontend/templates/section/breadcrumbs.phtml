@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_StyleGuide
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+declare(strict_types=1);
+
+/** @var \Scandiweb\StyleGuide\Block\Section $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+
+<?= $block->getLayout()->getBlock('breadcrumbs')->toHtml(); ?>
+
+<div class="max-w-80">
+    <h4 class="py-4"><?= __('Breadcrumbs with max width 320px') ?></h4>
+    <?= $block->getLayout()->getBlock('breadcrumbs')->toHtml(); ?>
+</div>
