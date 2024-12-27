@@ -14,6 +14,7 @@ use Hyva\Theme\ViewModel\HeroiconsSolid;
 
 /** @var HeroiconsSolid $heroiconssolid */
 $heroiconssolid = $viewModels->require(HeroiconsSolid::class);
+
 ?>
 <div aria-labelledby="block-customer-login-heading">
     <form autocomplete="off" class="form form-login" action="<?= $escaper->escapeUrl($block->getPostActionUrl()) ?>"
@@ -143,6 +144,7 @@ $heroiconssolid = $viewModels->require(HeroiconsSolid::class);
                     ->setData('label', 'Country')
                     ->setData('id', 'select-id')
                     ->setData('name', 'select-name')
+                    ->setData('css_class', 'w-[320px]')
                     ->setData('options', [
                         [
                             'value' => 'option-1',
@@ -160,42 +162,12 @@ $heroiconssolid = $viewModels->require(HeroiconsSolid::class);
                     ])
                     ->setData('placeholder', 'Select country...')
                     ->setData('is_required', true)
-                    ->setData('css_class', 'max-w-96')
-                    ->toHtml();
-                ?>
-            </div>
-            <div class="field">
-                <?=
-                $this->getLayout()
-                    ->createBlock('Magento\Framework\View\Element\Template')
-                    ->setTemplate('Hyva_Theme::ui/dropdown.phtml')
-                    ->setData('label', 'Country')
-                    ->setData('id', 'select-id-2')
-                    ->setData('name', 'select-name')
-                    ->setData('options', [
-                        [
-                            'value' => 'option-1',
-                            'label' => 'Option 1',
-                        ],
-                        [
-                            'value' => 'option-2',
-                            'label' => 'Option 2 disabled',
-                            'disabled' => true
-                        ],
-                        [
-                            'value' => 'option-3',
-                            'label' => 'Option 3',
-                        ]
-                    ])
-                    ->setData('placeholder', 'Select country...')
-                    ->setData('is_required', true)
-                    ->setData('css_class', 'max-w-96')
                     ->toHtml();
                 ?>
             </div>
             <hr class="my-4" />
             <div class="field choice">
-                <input type="checkbox" name="checkbox-1" id="checkbox-1" value="1" title="Checkbox"
+                <input type="checkbox" name="checkbox-1" id="checkbox" value="1" title="Checkbox"
                     class="checkbox">
                 <label for="checkbox-1" class="label"><?= __('Checkbox') ?></label>
             </div>
@@ -213,14 +185,6 @@ $heroiconssolid = $viewModels->require(HeroiconsSolid::class);
                 <input type="checkbox" name="checkbox-4" id="checkbox-4" value="1" title="Checkbox"
                     class="checkbox" disabled checked>
                 <label for="checkbox-4" class="label"><?= __('Checkbox checked disabled') ?></label>
-            </div>
-            <div class="field field-reserved field-error choice">
-                <input type="checkbox" name="checkbox-4" id="checkbox-4" value="1" title="Checkbox"
-                    class="checkbox">
-                <label for="checkbox-4" class="label"><?= __('Checkbox error') ?></label>
-                <ul class="messages">
-                    <li><?= __('Error message') ?></li>
-                </ul>
             </div>
             <hr class="my-4" />
             <div class="field choice pt-3">
@@ -246,14 +210,6 @@ $heroiconssolid = $viewModels->require(HeroiconsSolid::class);
                 <label class="label" for="radio-test-4">
                     <?= __('Radio checked disabled') ?>
                 </label>
-            </div>
-            <div class="field field-reserved field-error choice">
-                <input type="radio" name="radio-5" id="radio-5" value="1" title="radio"
-                    class="radio">
-                <label for="radio-5" class="label"><?= __('Radio error') ?></label>
-                <ul class="messages">
-                    <li><?= __('Error message') ?></li>
-                </ul>
             </div>
         </fieldset>
     </form>

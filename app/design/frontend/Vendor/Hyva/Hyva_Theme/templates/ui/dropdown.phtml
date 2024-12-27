@@ -96,7 +96,6 @@ $cssClass = $block->getCssClass();
                                 $uniqueId ?>()" class="form-select-wrapper">
         <select
             class="form-select w-full"
-            :class="{ 'rounded-b-none border-secondary': !$store.device.isMobile && isOpen, 'form-select-placeholder-value': selectedOptionValue === '' }"
             @mousedown="!$store.device.isMobile ? $event.preventDefault() : null"
             @click="!$store.device.isMobile ? (isOpen = !isOpen) : null"
             @mouseup="!$store.device.isMobile ? $event.preventDefault() : null"
@@ -136,7 +135,7 @@ $cssClass = $block->getCssClass();
         </select>
         <div class="chevron" :class="{ 'chevron-opened': isOpen }">
             <!-- Change to your chevron or custom icon -->
-            <?= $hyvaicons->renderHtml('chevron', '', 14, 14) ?>
+            <?= $hyvaicons->renderHtml('chevron', '', 20, 20) ?>
         </div>
         <ul
             x-cloak
