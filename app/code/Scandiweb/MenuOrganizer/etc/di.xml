@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Scandiweb
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="ScandiPWA\MenuOrganizer\Api\Data\ItemInterface" type="Scandiweb\MenuOrganizer\Api\Data\ItemInterface" />
+    <preference for="ScandiPWA\MenuOrganizer\Model\Item" type="Scandiweb\MenuOrganizer\Model\Item" />
+    <preference for="ScandiPWA\MenuOrganizer\Model\ResourceModel\Item" type="Scandiweb\MenuOrganizer\Model\ResourceModel\Item" />
+    <preference for="ScandiPWA\MenuOrganizer\Helper\Adminhtml\Data" type="Scandiweb\MenuOrganizer\Helper\Adminhtml\Data" />
+    <preference for="ScandiPWA\MenuOrganizer\Block\Adminhtml\Item\Edit\Form" type="Scandiweb\MenuOrganizer\Block\Adminhtml\Item\Edit\Form" />
+</config>

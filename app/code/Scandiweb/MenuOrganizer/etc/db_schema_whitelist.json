@@ -1,0 +1,32 @@
+{
+    "scandiweb_menumanager_item": {
+        "column": {
+            "item_id": true,
+            "menu_id": true,
+            "parent_id": true,
+            "title": true,
+            "item_class": true,
+            "identifier": true,
+            "url": true,
+            "open_type": true,
+            "url_type": true,
+            "cms_page_id": true,
+            "category_id": true,
+            "product_sku": true,
+            "position": true,
+            "is_active": true,
+            "url_attributes": true,
+            "icon": true,
+            "icon_alt": true
+        },
+        "index": {
+            "SCANDIWEB_MENUMANAGER_ITEM_IDENTIFIER": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_0AB456CB28F7294C1412103466C201D3": true,
+            "SCANDIWEB_MENUMANAGER_ITEM_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID": true,
+            "SCANDIWEB_MENUMANAGER_ITEM_CMS_PAGE_ID_CMS_PAGE_PAGE_ID": true
+        }
+    }
+}

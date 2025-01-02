@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Scandiweb
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="scandiweb_menumanager_item" resource="default" engine="innodb">
+        <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="smallint" name="menu_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+        <column xsi:type="smallint" name="parent_id" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
+        <column xsi:type="varchar" name="title" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="item_class" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="identifier" nullable="false" length="100"/>
+        <column xsi:type="text" name="url" nullable="true"/>
+        <column xsi:type="smallint" name="open_type" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
+        <column xsi:type="smallint" name="url_type" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
+        <column xsi:type="smallint" name="cms_page_id" padding="6" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="true" identity="false"/>
+        <column xsi:type="varchar" name="product_sku" nullable="true" length="255"/>
+        <column xsi:type="smallint" name="position" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false" default="1"/>
+        <column xsi:type="varchar" name="url_attributes" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="icon" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="icon_alt" nullable="true" length="255"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="item_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SCANDIWEB_MENUMANAGER_ITEM_MENU_ID" table="scandiweb_menumanager_item" column="menu_id" referenceTable="scandiweb_menumanager_menu" referenceColumn="menu_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SCANDIWEB_MENUMANAGER_ITEM_CATEGORY_ID" table="scandiweb_menumanager_item" column="category_id" referenceTable="catalog_category_entity" referenceColumn="entity_id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="SCANDIWEB_MENUMANAGER_ITEM_CMS_PAGE_ID" table="scandiweb_menumanager_item" column="cms_page_id" referenceTable="cms_page" referenceColumn="page_id" onDelete="SET NULL"/>
+        <index referenceId="SCANDIWEB_MENUMANAGER_ITEM_IDENTIFIER" indexType="btree">
+            <column name="identifier"/>
+        </index>
+    </table>
+</schema>

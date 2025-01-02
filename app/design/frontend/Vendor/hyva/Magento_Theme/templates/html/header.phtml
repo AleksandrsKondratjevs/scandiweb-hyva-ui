@@ -1,0 +1,289 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Checkout\Block\Cart\Sidebar as SidebarCart;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var StoreConfig $storeConfig */
+$storeConfig = $viewModels->require(StoreConfig::class);
+$showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY);
+?>
+<script>
+    function initHeader() {
+        return {
+            searchOpen: false,
+            cart: {},
+            isCartOpen: false,
+            isMobile: true,
+            // Defined in px
+            hideOnScrollThreshold: 300,
+            isPromoHidden: false,
+
+            init() {
+                const matchMedia = window.matchMedia("(max-width: 1023px)");
+                this.onChangeMedia(matchMedia);
+
+                if (typeof matchMedia.onchange !== 'object') {
+                    //prevent an old iOS Safari bug where addEventListener does not accept an event type parameter
+                    matchMedia.addListener((event) => this.onChangeMedia(event));
+                } else {
+                    matchMedia.addEventListener(
+                        "change",
+                        (event) => this.onChangeMedia(event)
+                    )
+                }
+            },
+            handleScrollThreshold() {
+                const {
+                    scrollY
+                } = window;
+
+                this.isPromoHidden = scrollY > this.hideOnScrollThreshold;
+            },
+            getData(data) {
+                if (data.cart) {
+                    this.cart = data.cart
+                }
+            },
+            isCartEmpty() {
+                return !this.cart.summary_count
+            },
+            toggleCart(event) {
+                if (event.detail && event.detail.isOpen !== undefined) {
+                    this.isCartOpen = event.detail.isOpen
+                    if (!this.isCartOpen && this.$refs && this.$refs.cartButton) {
+                        this.$refs.cartButton.focus()
+                    }
+                } else {
+                    <?php
+                    /*
+                     * The toggle-cart event was previously dispatched without parameter to open the drawer (not toggle).
+                     * Keeping this in here for backwards compatibility.
+                     */
+                    ?>
+                    this.isCartOpen = true
+                }
+            },
+            onChangeMedia(mediaQuery) {
+                if (this.isMobile !== mediaQuery.matches) {
+                    this.isMobile = mediaQuery.matches;
+                    if (this.isMobile) {
+                        this.$refs.searchContainerMobile.appendChild(this.$refs.searchForm);
+                    } else {
+                        this.$refs.searchContainerDesktop.appendChild(this.$refs.searchForm);
+                    }
+                }
+            }
+        }
+    }
+
+    function initCompareHeader() {
+        return {
+            compareProducts: null,
+            itemCount: 0,
+            receiveCompareData(data) {
+                if (data['compare-products']) {
+                    this.compareProducts = data['compare-products'];
+                    this.itemCount = this.compareProducts.count;
+                }
+            }
+        }
+    }
+</script>
+<!-- Sticky header hight is defined in container class -->
+<div id="header"
+    class="h-[246px] lg:h-[230px]"
+    x-data="initHeader()"
+    @scroll.window="handleScrollThreshold"
+    @private-content-loaded.window="getData(event.detail.data)">
+    <!-- Sticky container -->
+    <div class="fixed z-50 w-screen top-0">
+        <?php
+        /**
+         * This notification could come from a CMS static block.
+         * Create or add to Magento_Theme/layout/default.xml
+         * <referenceBlock name="header-content">
+         <block class="Magento\Cms\Block\Block" name="header-notification">
+           <arguments>
+             <argument name="block_id" xsi:type="string">header-notification</argument>
+           </arguments>
+         </block>
+       </referenceBlock>
+         *
+         * And echo with $block->getChildHtml('header-notification')
+         */
+        ?>
+
+        <div
+            class="bg-blue-900 text-white text-sm leading-5 font-semibold text-center grid transition-[grid-template-rows] grid-rows-[1fr] duration-500"
+            :class="{ 'grid-rows-[0fr]': isPromoHidden, 'grid-rows-[1fr]': !isPromoHidden  }">
+            <div class="overflow-hidden">
+                <div class="p-2 container">
+                    <a href="#" class="hover:underline">
+                        <?= $escaper->escapeHtml(__('Get ready for a dazzling summer with our new arrivals →')) ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-md relative py-3">
+            <div class="container flex gap-3 justify-between items-center">
+
+                <?= $block->getChildHtml('topmenu.mobile') ?>
+
+                <!--Logo-->
+                <?= $block->getChildHtml('logo'); ?>
+
+                <!--Search desktop-->
+                <div x-ref="searchContainerDesktop" class="hidden lg:block lg:flex-1 lg:mx-4 min-h-[74px]">
+                </div>
+
+                <div class="flex gap-4 items-center">
+
+                    <div class="hidden lg:block">
+                        <?= $block->getChildHtml('store-language-switcher'); ?>
+                    </div>
+
+                    <!--Compare Icon-->
+                    <a id="compare-link"
+                        class="relative invisible hidden lg:inline-block no-underline outline-none hover:text-black focus:ring-blue-700 focus:ring-1"
+                        :class="{ 'invisible': !(itemCount > 0) }"
+                        href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
+                        title="<?= $escaper->escapeHtml(__('Compare Products')) ?>"
+                        x-data="initCompareHeader()"
+                        @private-content-loaded.window="receiveCompareData($event.detail.data)">
+                        <?= $heroicons->scaleHtml('text-slate-800 hover:text-black') ?>
+
+                        <span class="sr-only label">
+                            <?= $escaper->escapeHtml(__('Compare Products')) ?>
+                        </span>
+
+                        <span class="absolute top-0 right-0 px-3 py-1 -mt-5 -mr-4 text-xs font-semibold
+                        leading-none text-center text-gray-700 uppercase transform
+                        translate-y-1/2 rounded-full bg-green-200">
+                            <span x-text="itemCount"></span>
+                            <span x-show="itemCount === 1" class="sr-only">
+                                <?= $escaper->escapeHtml(__('item')) ?>
+                            </span>
+                            <span x-show="itemCount > 1" class="sr-only">
+                                <?= $escaper->escapeHtml(__('items')) ?>
+                            </span>
+                        </span>
+                    </a>
+
+                    <!--Customer Icon & Dropdown-->
+                    <?= $block->getChildHtml('customer') ?>
+
+                    <!--Cart Icon-->
+                    <?php if ($showMiniCart): ?>
+                        <button
+                            <?php else: ?>
+                            <a
+                            <?php endif ?>
+                            id="menu-cart-icon"
+                            class="relative outline-none focus:ring-blue-700 focus:ring-1"
+                            x-ref="cartButton"
+                            :aria-disabled="isCartEmpty()"
+                            title="<?= $escaper->escapeHtmlAttr(__('Cart')) ?>"
+                            <?php if ($showMiniCart): ?>
+                            @click.prevent.stop="() => {
+                            $dispatch('toggle-cart', { isOpen: true })
+                        }"
+                            @toggle-cart.window="toggleCart($event)"
+                            :aria-expanded="isCartOpen"
+                            aria-haspopup="dialog"
+                            <?php else: ?>
+                            href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>"
+                            <?php endif ?>>
+                            <span
+                                class="sr-only label"
+                                x-text="`
+                            <?= $escaper->escapeHtml($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>,
+                            ${isCartEmpty() ?
+                            '<?= $escaper->escapeHtml(__('Cart is empty')) ?>' :
+                            hyva.str(
+                                'You have %1 product%2 in your cart.',
+                                cart.summary_count,
+                                cart.summary_count === 1 ? '' : 's'
+                            )}`
+                        ">
+                            </span>
+
+                            <?= $heroicons->shoppingCartHtml('text-slate-800 hover:text-black') ?>
+
+                            <span
+                                x-text="cart.summary_count"
+                                x-show="!isCartEmpty()"
+                                x-cloak
+                                class="
+                            absolute top-0 right-0 px-3 py-1 -mt-5 -mr-4 text-xs font-semibold
+                            leading-none text-center text-gray-700 uppercase transform
+                            translate-y-1/2 rounded-full bg-green-200
+                        "
+                                aria-hidden="true"></span>
+                            <?php if ($showMiniCart): ?>
+                        </button>
+                    <?php else: ?>
+                        </a>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-[#E2E8F0]">
+            <?= $block->getChildHtml('topmenu.desktop') ?>
+        </div>
+
+        <!--Search mobile-->
+        <div x-ref="searchContainerMobile" class="lg:hidden bg-slate-200">
+            <div x-ref="searchForm" class="container py-4">
+                <?= $block->getChildHtml('header-search'); ?>
+            </div>
+        </div>
+
+        <div class="bg-[#F1F5F9] px-4 py-2 text-center text-[#64748B] text-sm">
+            <ul class="container flex justify-center gap-11 lg:justify-between">
+                <li class="hidden lg:flex items-center gap-3">
+                    <?= $heroicons->checkHtml('text-green-500') ?>
+                    <span><?= $escaper->escapeHtml(__('Shipped within a day')) ?></span>
+                </li>
+                <li class="hidden lg:flex items-center gap-3">
+                    <?= $heroicons->checkHtml('text-green-500') ?>
+                    <span><?= $escaper->escapeHtml(__('Free shipping and returns')) ?></span>
+                </li>
+                <li class="hidden lg:flex items-center gap-3">
+                    <?= $heroicons->checkHtml('text-green-500') ?>
+                    <span><?= $escaper->escapeHtml(__('Free returns')) ?></span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <?= $heroicons->checkHtml('text-green-500') ?>
+                    <span><?= $escaper->escapeHtml(__('Refer a friend and get a discount')) ?></span>
+                </li>
+            </ul>
+        </div>
+
+        <!--Cart Drawer-->
+        <?= $block->getChildHtml('cart-drawer'); ?>
+
+        <!--Authentication Pop-Up-->
+        <?= $block->getChildHtml('authentication-popup'); ?>
+    </div>
+</div>

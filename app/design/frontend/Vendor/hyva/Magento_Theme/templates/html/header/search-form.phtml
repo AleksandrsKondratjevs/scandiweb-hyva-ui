@@ -1,0 +1,136 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Search\Helper\Data as SearchHelper;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\Model\ViewModelRegistry;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var SearchHelper $helper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HeroiconsOutline $heroIcons */
+
+$helper = $this->helper(SearchHelper::class);
+$heroIcons = $viewModels->require(HeroiconsOutline::class);
+?>
+<script>
+    'use strict';
+
+    function initMiniSearch() {
+        return {
+            minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
+            suggestions: [],
+            suggest() {
+                const search = this.$refs.searchInput;
+                if (search.value.length >= this.minSearchLength) {
+                    search.setCustomValidity('');
+                    search.reportValidity();
+                    this.fetchSuggestions(search.value);
+                } else {
+                    this.suggestions = [];
+                }
+            },
+            fetchSuggestions(term) {
+                fetch(
+                        window.BASE_URL + 'search/ajax/suggest?' + new URLSearchParams({
+                            q: term
+                        }), {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        }
+                    )
+                    .then(response => response.json())
+                    .then(result => this.suggestions = result);
+            },
+            search(term) {
+                const search = this.$refs.searchInput;
+                term = term || search.value;
+                if (term.length < this.minSearchLength) {
+                    search.setCustomValidity('<?= $escaper->escapeJs(
+                                                    __('Minimum Search query length is %1', $helper->getMinQueryLength())
+                                                ) ?>');
+                    search.reportValidity();
+                } else {
+                    search.setCustomValidity('');
+                    search.value = term;
+                    this.$refs.form.submit();
+                }
+            },
+            focusElement(element) {
+                if (element && element.nodeName === "DIV") {
+                    element.focus();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+</script>
+<div class="" x-data="initMiniSearch()">
+    <form
+        class="form minisearch w-full flex"
+        id="search_mini_form"
+        x-ref="form"
+        @submit.prevent="search()"
+        action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>"
+        method="get"
+        role="search">
+        <label class="hidden" for="search" data-role="minisearch-label">
+            <span><?= $escaper->escapeHtml(__('Search')) ?></span>
+        </label>
+        <input id="search"
+            x-ref="searchInput"
+            type="search"
+            autocomplete="off"
+            name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+            value="<?=
+                    /** @noEscape */
+                    $helper->getEscapedQueryText() ?>"
+            placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
+            maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+            class="border-gray-200 border flex-1 px-3 py-2 shadow-sm rounded-l-md outline-none
+                      placeholder:text-gray-400 focus:ring-blue-700 focus:ring-1"
+            @focus.once="suggest"
+            @input.debounce.300="suggest"
+            @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))" />
+        <template x-if="suggestions.length > 0">
+            <div class="w-full leading-normal transition appearance-none text-grey-800 flex flex-col mt-1">
+                <template x-for="suggestion in suggestions">
+                    <div class="flex justify-between p-2 bg-container-lighter even:bg-container mb-1 cursor-pointer
+                                 border border-container hover:bg-container-darker"
+                        tabindex="0"
+                        @click="search(suggestion.title)"
+                        @keydown.enter="search(suggestion.title)"
+                        @keydown.arrow-up.prevent="
+                              focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()
+                          "
+                        @keydown.arrow-down.prevent="focusElement($event.target.nextElementSibling)">
+                        <span x-text="suggestion.title"></span>
+                        <span x-text="suggestion.num_results"></span>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <button type="submit"
+            title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+            class="bg-blue-700 text-white shadow-sm rounded-r-md px-3 outline-none focus:ring-blue-700 focus:ring-1"
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>">
+            <?= $heroIcons->searchHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+        </button>
+    </form>
+</div>
