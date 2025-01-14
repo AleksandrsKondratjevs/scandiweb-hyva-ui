@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+ -->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd" extends="pagebuilder_base_form">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">pagebuilder_scandiweb_featured_products_form.pagebuilder_scandiweb_featured_products_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Scandiweb Featured products</item>
+    </argument>
+    <settings>
+        <deps>
+            <dep>pagebuilder_scandiweb_featured_products_form.pagebuilder_scandiweb_featured_products_form_data_source</dep>
+        </deps>
+        <namespace>pagebuilder_scandiweb_featured_products_form</namespace>
+    </settings>
+    <dataSource name="pagebuilder_scandiweb_featured_products_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_PageBuilder/js/form/provider</item>
+            </item>
+        </argument>
+        <dataProvider name="pagebuilder_scandiweb_featured_products_form_data_source" class="Magento\PageBuilder\Model\ContentType\DataProvider">
+            <settings>
+                <requestFieldName/>
+                <primaryFieldName/>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="appearance_fieldset" sortOrder="10" component="Magento_PageBuilder/js/form/element/dependent-fieldset">
+        <settings>
+            <label translate="true">Type</label>
+            <additionalClasses>
+                <class name="admin__fieldset-visual-select-large">true</class>
+            </additionalClasses>
+            <collapsible>false</collapsible>
+            <opened>true</opened>
+            <imports>
+                <link name="hideFieldset">${$.name}.appearance:options</link>
+                <link name="hideLabel">${$.name}.appearance:options</link>
+            </imports>
+        </settings>
+        <field name="appearance" formElement="select" sortOrder="10" component="Magento_PageBuilder/js/form/element/dependent-visual-select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">default</item>
+                </item>
+            </argument>
+            <settings>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                    <class name="admin__field-visual-select-container">true</class>
+                </additionalClasses>
+                <dataType>text</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <elementTmpl>Magento_PageBuilder/form/element/visual-select</elementTmpl>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="AppearanceSourceScandiwebFeaturedProducts"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+    <fieldset name="featured_products_data" sortOrder="10">
+        <settings>
+            <label translate="true">Main</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+        </settings>
+        <field name="title" sortOrder="10" formElement="input">
+            <settings>
+                <label translate="true">Title</label>
+                <dataType>text</dataType>
+                <dataScope>title</dataScope>
+                <validation>
+                    <rule name="validate-string" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="is_show_all_enabled" sortOrder="20" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">true</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Enable Show all button</label>
+                <dataType>boolean</dataType>
+                <dataScope>is_show_all_enabled</dataScope>
+                <notice translate="true">Enabling this setting will show button which will redirect to selected category</notice>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="string">false</map>
+                            <map name="true" xsi:type="string">true</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+    </fieldset>
+    <fieldset name="sections_data" sortOrder="20">
+        <settings>
+            <label translate="true">Sections</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+        </settings>
+        <dynamicRows name="products_sections">
+            <settings>
+                <addButtonLabel translate="true">Add Section</addButtonLabel>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                    <class name="featured-products">true</class>
+                </additionalClasses>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <componentType>dynamicRows</componentType>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <field name="section_title" formElement="input" sortOrder="10">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Section Title</label>
+                    </settings>
+                </field>
+                <field name="category_id" component="Magento_Catalog/js/components/new-category" sortOrder="20" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="filterOptions" xsi:type="boolean">true</item>
+                            <item name="multiple" xsi:type="boolean">false</item>
+                            <item name="showCheckbox" xsi:type="boolean">false</item>
+                            <item name="disableLabel" xsi:type="boolean">true</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <elementTmpl>ui/grid/filters/elements/ui-select</elementTmpl>
+                        <label translate="true">Category</label>
+                        <dataScope>category_id</dataScope>
+                        <componentType>field</componentType>
+                        <listens>
+                            <link name="${ $.namespace }.${ $.namespace }:responseData">setParsed</link>
+                        </listens>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Magento\Catalog\Ui\Component\Product\Form\Categories\Options"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="section_products_limit" formElement="input" sortOrder="30">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="default" xsi:type="number">12</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="validate-digits" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>number</dataType>
+                        <label>Products limit</label>
+                    </settings>
+                </field>
+                <field name="section_additional_params" formElement="input" sortOrder="40">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Additional parameters to url (Show All button)</label>
+                        <notice translate="true">In format: page=2&amp;brand=sony</notice>
+                    </settings>
+                </field>
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Delete</label>
+                        <componentType>actionDelete</componentType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+    <fieldset name="slider_configurations" sortOrder="30">
+        <settings>
+            <label translate="true">Slider Configurations</label>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+        </settings>
+        <field name="slider_infinitive" sortOrder="10" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">false</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Infinitive</label>
+                <dataType>boolean</dataType>
+                <dataScope>slider_infinitive</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="string">false</map>
+                            <map name="true" xsi:type="string">true</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="slider_show_pagination" sortOrder="20" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">true</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Show Pagination</label>
+                <dataType>boolean</dataType>
+                <dataScope>slider_show_pagination</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="string">false</map>
+                            <map name="true" xsi:type="string">true</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="slider_pagination_type_progressbar" sortOrder="30" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">false</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Pagination as progress bar</label>
+                <dataType>boolean</dataType>
+                <dataScope>slider_pagination_type_progressbar</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="string">false</map>
+                            <map name="true" xsi:type="string">true</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="slider_show_arrows" sortOrder="40" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">true</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Show arrows</label>
+                <dataType>boolean</dataType>
+                <dataScope>slider_show_arrows</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="string">false</map>
+                            <map name="true" xsi:type="string">true</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

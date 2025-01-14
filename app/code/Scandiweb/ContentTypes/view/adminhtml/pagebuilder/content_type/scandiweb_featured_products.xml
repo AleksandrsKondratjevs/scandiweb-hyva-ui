@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_PageBuilder:etc/content_type.xsd">
+	<type name="scandiweb_featured_products" label="Featured products" menu_section="scandiweb_components" component="Magento_PageBuilder/js/content-type" preview_component="Magento_PageBuilder/js/content-type/preview" master_component="Magento_PageBuilder/js/content-type/master" form="pagebuilder_scandiweb_featured_products_form" sortOrder="21" translate="label">
+		<children default_policy="deny" />
+		<parents default_policy="deny">
+			<parent name="row" policy="allow" />
+			<parent name="column" policy="allow" />
+		</parents>
+		<appearances>
+			<appearance name="default" default="true" preview_template="Scandiweb_ContentTypes/content-type/featured-products/default/preview" master_template="Scandiweb_ContentTypes/content-type/featured-products/default/master" reader="Magento_PageBuilder/js/master-format/read/configurable">
+				<elements>
+					<element name="main">
+						<style name="text_align" source="text_align" />
+						<style name="border" source="border_style" converter="Magento_PageBuilder/js/converter/style/border-style" />
+						<style name="border_color" source="border_color" />
+						<style name="background_color" source="background_color" />
+						<style name="background_image" source="background_image" converter="Magento_PageBuilder/js/converter/style/background-image" preview_converter="Magento_PageBuilder/js/converter/style/preview/background-image" />
+						<style name="border_width" source="border_width" converter="Magento_PageBuilder/js/converter/style/border-width" />
+						<style name="border_radius" source="border_radius" converter="Magento_PageBuilder/js/converter/style/remove-px" />
+						<style name="margins" storage_key="margins_and_padding" reader="Magento_PageBuilder/js/property/margins" converter="Magento_PageBuilder/js/converter/style/margins" />
+						<style name="padding" storage_key="margins_and_padding" reader="Magento_PageBuilder/js/property/paddings" converter="Magento_PageBuilder/js/converter/style/paddings" />
+						<style name="display" source="display" converter="Magento_PageBuilder/js/converter/style/display" preview_converter="Magento_PageBuilder/js/converter/style/preview/display" />
+						<css name="css_classes" />
+						<attribute name="name" source="data-content-type" />
+						<attribute name="appearance" source="data-appearance" />
+						<attribute name="is_show_all_enabled" source="is_show_all_enabled"/>
+						<attribute name="title" source="title"/>
+						<attribute name="slider_infinitive" source="slider_infinitive"/>
+						<attribute name="slider_show_pagination" source="slider_show_pagination"/>
+						<attribute name="slider_pagination_type_progressbar" source="slider_pagination_type_progressbar"/>
+						<attribute name="slider_show_arrows" source="slider_show_arrows"/>
+					</element>
+					<element name="products_sections">
+						<attribute name="products_sections" source="cards" converter="Scandiweb_ContentTypes/js/content-type/map/converter/attribute/array" />
+					</element>
+					<element name="block_directive">
+						<html name="block_directive" converter="Magento_PageBuilder/js/converter/html/tag-escaper" />
+					</element>
+				</elements>
+				<converters>
+					<converter component="Scandiweb_ContentTypes/js/content-type/featured-products/block-directive" name="block_directive">
+						<config>
+							<item name="html_variable" value="block_directive"/>
+							<item name="block_class" value="Scandiweb\ContentTypes\Block\ContentTypes\FeaturedProducts"/>
+						</config>
+					</converter>
+				</converters>
+			</appearance>
+		</appearances>
+	</type>
+</config>

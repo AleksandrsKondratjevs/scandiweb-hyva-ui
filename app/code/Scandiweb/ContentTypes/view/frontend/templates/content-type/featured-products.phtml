@@ -1,0 +1,208 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+$sections = $block->getSections();
+
+if (!count($sections)) {
+    return null;
+}
+
+$swiperUrl = $block->getViewFileUrl('Scandiweb_ContentTypes::js/swiper.min.js');
+$swiperCssUrl = $block->getViewFileUrl('Scandiweb_ContentTypes::css/swiper.min.css');
+
+$uniqueId = '_' . uniqid('');
+
+// Content type configurations
+$title = $block->getTitle();
+$isShowAllButtonEnabled = $block->getIsShowAllEnabled();
+
+// Slider configurations
+$isSliderInfinitive = $block->getSliderInfinitive();
+$isSliderShowPagination = $block->getSliderShowPagination();
+$isSliderPaginationProgressbar = $block->getSliderPaginationTypeProgressbar();
+$isSliderShowArrows = $block->getSliderShowArrows();
+
+?>
+
+<script>
+    function initFeaturedProducts<?= $uniqueId ?>() {
+        return {
+            selectedCategory: <?= json_encode($sections[0]) ?>,
+            isLoading: true,
+
+            init() {
+                if (!window.Swiper) {
+                    this.addJsScript();
+                    this.addCss();
+                } else {
+                    this.initializeSwiper();
+                }
+
+                this.fetchProducts();
+
+                this.$watch('selectedCategory', () => {
+                    this.fetchProducts();
+                })
+            },
+            addJsScript() {
+                const self = this;
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.addEventListener('load', () => {
+                    self.initializeSwiper();
+                });
+                script.src = '<?= $escaper->escapeJs($escaper->escapeHtml($swiperUrl)) ?>';
+                document.head.appendChild(script);
+            },
+            addCss() {
+                const link = document.createElement('link');
+                link.type = 'text/css';
+                link.rel = 'stylesheet';
+                link.href = '<?= $escaper->escapeJs($escaper->escapeHtml($swiperCssUrl)) ?>';
+                document.head.appendChild(link);
+            },
+            initializeSwiper() {
+                const swiperElement = this.$refs.categoriesWrapper;
+
+                const swiper = new Swiper(swiperElement, {
+                    slidesPerView: 'auto',
+                    spaceBetween: 16,
+                    mousewheel: {
+                        forceToAxis: true
+                    },
+                });
+            },
+            fetchProducts() {
+                // Requires to not show loader in case if content is cached and comes fast
+                const loaderTimeout = setTimeout(() => this.isLoading = true, 200);
+
+                const url = 'scandiweb/ContentType/GetFeaturedProducts?' + new URLSearchParams({
+                    category_id: this.selectedCategory.category_id,
+                    products_limit: this.selectedCategory.limit,
+                    <?php if ($isSliderInfinitive === 'true'): ?>
+                        is_slider_infinitive: true,
+                    <?php endif; ?>
+                    <?php if ($isSliderShowPagination === 'true'): ?>
+                        is_slider_show_pagination: true,
+                    <?php endif; ?>
+                    <?php if ($isSliderPaginationProgressbar === 'true'): ?>
+                        is_slider_pagination_progressbar: true,
+                    <?php endif; ?>
+                    <?php if ($isSliderShowArrows === 'true'): ?>
+                        is_slider_show_arrows: true,
+                    <?php endif; ?>
+                });
+
+                fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                    }
+                }).then((response) => {
+                    return response.text()
+                }).then((response) => {
+                    if (!response) {
+                        const noResultsFound = "<div class='product-slider no-results min-h-[510px] lg:min-h-[506px]l w-full flex justify-center items-center'>No products found! </div>"
+                        this.replaceSliderElement(noResultsFound);
+                        return;
+                    }
+
+                    this.replaceSliderElement(response);
+                }).finally(() => {
+                    this.isLoading = false;
+                    clearTimeout(loaderTimeout)
+                });
+            },
+            replaceSliderElement(content) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(content, 'text/html');
+                const contentNode = doc.querySelector(".product-slider");
+
+                if (!contentNode) {
+                    return;
+                }
+
+                const tmpScripts = doc.getElementsByTagName('script');
+
+                if (tmpScripts.length > 0) {
+                    const scripts = [];
+                    for (let i = 0; i < tmpScripts.length; i++) {
+                        scripts.push(tmpScripts[i]);
+                    }
+
+                    for (let i = 0; i < scripts.length; i++) {
+                        let script = document.createElement('script');
+                        script.innerHTML = scripts[i].innerHTML;
+
+                        document.head.appendChild(script);
+
+                        scripts[i].parentNode.removeChild(scripts[i]);
+                    }
+                }
+
+                this.$refs.productsSliderContainer.replaceChild(contentNode, this.$refs.productsSliderContainer.firstChild);
+            },
+            handleCategorySelect(sectionData) {
+                this.selectedCategory = sectionData;
+            },
+            decodeHtmlEntities(input) {
+                const tempElement = document.createElement('p');
+                tempElement.innerHTML = input;
+                return tempElement.textContent || tempElement.innerText;
+            },
+            getUrl() {
+                if (!this.selectedCategory?.params) {
+                    return this.selectedCategory.url;
+                }
+
+                const decodedParams = this.decodeHtmlEntities(this.selectedCategory.params);
+                return this.selectedCategory.url + '?' + decodedParams;
+            }
+        }
+    }
+</script>
+
+<div x-data="initFeaturedProducts<?= $uniqueId ?>">
+    <h2 class="w-full text-center text-2xl font-bold mb-3">
+        <?= $escaper->escapeHtml($title) ?>
+    </h2>
+    <div class="swiper" x-ref="categoriesWrapper">
+        <div class="swiper-wrapper flex overflow-hidden !py-1">
+            <?php foreach ($sections as $index => $section): ?>
+                <?php
+                $id = $section['category_id'];
+                $title = $section['title'];
+                ?>
+                <button
+                    class="btn <?= $index === 0 ? 'btn-primary' : 'btn-secondary' ?> swiper-slide !max-w-max min-w-max mr-4"
+                    :class="{
+                        'btn-primary': selectedCategory.category_id == <?= $id ?>,
+                        'btn-secondary': selectedCategory.category_id != <?= $id ?>
+                    }"
+                    @click="handleCategorySelect(<?= $escaper->escapeHtmlAttr(json_encode($section)) ?>)">
+                    <?= $escaper->escapeHtml($title) ?>
+                </button>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <div x-ref="productsSliderContainer" class="h-full w-full min-h-80 lg:min-h-[460px] relative">
+        <div class="w-full h-full absolute top-0">
+            <?= $this->getLayout()
+                ->createBlock('Magento\Framework\View\Element\Template')
+                ->setTemplate('Hyva_Theme::ui/loading-block.phtml')
+                ->toHtml(); ?>
+        </div>
+    </div>
+    <?php if ($isShowAllButtonEnabled === 'true'): ?>
+        <a class="btn btn-secondary w-max mx-auto" :href="getUrl" x-text="'<?= __('Shop All') ?> ' + decodeHtmlEntities(selectedCategory.title)">
+            <?= __('Shop All') . ' ' . $sections[0]['title'] ?>
+        </a>
+    <?php endif; ?>
+</div>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_PageBuilder:etc/menu_section.xsd">
+    <menu_section name="scandiweb_components" translate="label" sortOrder="40" label="Scandiweb"/>
+</config>

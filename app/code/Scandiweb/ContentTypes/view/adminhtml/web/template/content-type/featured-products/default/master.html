@@ -1,0 +1,16 @@
+<div attr="data.main.attributes"
+     ko-style="data.main.style"
+     css="data.main.css">
+    <div data-is-page-builder-ignored-element="true">
+        <if
+            args="data.products_sections.attributes().cards.length > 0 && data.products_sections.attributes().cards !== '[]'">
+            <div data-bind="attr: { cards: JSON.stringify(data.products_sections.attributes().cards) }"
+                 ko-style="data.products_sections.style"
+                 data-element="products_sections"
+                 css="data.products_sections.css"
+                 hidden></div>
+        </if>
+    </div>
+    <div attr="data.block_directive.attributes"
+         html="data.block_directive.html"></div>
+</div>
