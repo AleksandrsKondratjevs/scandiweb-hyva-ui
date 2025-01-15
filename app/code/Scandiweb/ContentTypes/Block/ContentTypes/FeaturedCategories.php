@@ -66,7 +66,9 @@ class FeaturedCategories extends Template implements BlockInterface
         $sectionData = $this->serializer->unserialize($sectionData);
 
         foreach ($sectionData as $section) {
-            $categoryIDs[] = (int) $section['category_id'];
+            if ($section['condition_option'] === 'category_id') {
+                $categoryIDs[] = (int) $section['category_id'];
+            }
         }
 
         $collection = $this->categoryCollection->create()->addFieldToSelect('url_path')->addFieldToFilter('entity_id', ['in' => $categoryIDs]);
@@ -78,9 +80,24 @@ class FeaturedCategories extends Template implements BlockInterface
             $data[] = [
                 'title' => $section['section_title'],
                 'image' => str_replace("\n", "", $section['section_img'][0]['url']),
-                'url' => $this->categoryHelper->getCategoryUrl($categoryUrls[$categoryId]),
+                'url' => '#'
             ];
+
+            $lastIndex = count($data) - 1;
+
+            switch ($section['condition_option']) {
+                case 'category_id':
+                    $data[$lastIndex]['url'] = $this->categoryHelper->getCategoryUrl($categoryUrls[$categoryId]);
+                    break;
+                case 'custom_url':
+                    $data[$lastIndex]['url'] = $section['custom_url'];
+                    break;
+            }
         }
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $logger = $objectManager->create('\Psr\Log\LoggerInterface');
+        $logger->info("test", (array)$data);
 
 
         return $data;

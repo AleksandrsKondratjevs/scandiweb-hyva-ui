@@ -97,11 +97,17 @@
             <opened>true</opened>
         </settings>
         <dynamicRows name="categories_sections">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Scandiweb_ContentTypes/js/helper/dynamic-rows-override</item>
+                </item>
+            </argument>
             <settings>
+                <columnsHeader>false</columnsHeader>
                 <addButtonLabel translate="true">Add Section</addButtonLabel>
                 <additionalClasses>
                     <class name="admin__field-wide">true</class>
-                    <class name="featured-products">true</class>
+                    <class name="admin__field-label-left">true</class>
                 </additionalClasses>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
@@ -127,7 +133,8 @@
                             <rule name="required-entry" xsi:type="boolean">true</rule>
                         </validation>
                         <dataType>text</dataType>
-                        <label>Section Title</label>
+                        <label>Title</label>
+                        <labelVisible>true</labelVisible>
                     </settings>
                 </field>
                 <field name="section_img" formElement="imageUploader" sortOrder="20">
@@ -135,7 +142,7 @@
                         <validation>
                             <rule name="required-entry" xsi:type="boolean">true</rule>
                         </validation>
-                        <label translate="true">Section Image</label>
+                        <label translate="true">Image</label>
                         <componentType>imageUploader</componentType>
                     </settings>
                     <formElements>
@@ -151,6 +158,36 @@
                         </imageUploader>
                     </formElements>
                 </field>
+                <field name="condition_option" sortOrder="25" formElement="select" component="Magento_PageBuilder/js/form/element/condition-options">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Url Type</label>
+                        <elementTmpl>Magento_PageBuilder/form/element/visual-select</elementTmpl>
+                        <exports>
+                            <link name="category_idVisible">${$.parentName}.category_id:visible</link>
+                            <link name="custom_urlVisible">${$.parentName}.custom_url:visible</link>
+                        </exports>
+                        <dataScope>condition_option</dataScope>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options>
+                                    <option name="0" xsi:type="array">
+                                        <item name="size" xsi:type="string">small</item>
+                                        <item name="value" xsi:type="string">category_id</item>
+                                        <item name="title" xsi:type="string" translate="true">Category</item>
+                                    </option>
+                                    <option name="1" xsi:type="array">
+                                        <item name="size" xsi:type="string">small</item>
+                                        <item name="value" xsi:type="string">custom_url</item>
+                                        <item name="title" xsi:type="string" translate="true">Custom Url</item>
+                                    </option>
+                                </options>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
                 <field name="category_id" component="Magento_Catalog/js/components/new-category" sortOrder="30" formElement="select">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -158,19 +195,21 @@
                             <item name="multiple" xsi:type="boolean">false</item>
                             <item name="showCheckbox" xsi:type="boolean">false</item>
                             <item name="disableLabel" xsi:type="boolean">true</item>
+                            <item name="levelsVisibility" xsi:type="number">1</item>
                         </item>
                     </argument>
                     <settings>
-                        <validation>
-                            <rule name="required-entry" xsi:type="boolean">true</rule>
-                        </validation>
+                        <visible>false</visible>
                         <elementTmpl>ui/grid/filters/elements/ui-select</elementTmpl>
                         <label translate="true">Category</label>
                         <dataScope>category_id</dataScope>
                         <componentType>field</componentType>
-                        <listens>
-                            <link name="${ $.namespace }.${ $.namespace }:responseData">setParsed</link>
-                        </listens>
+                        <links>
+                            <link name="visible">type:value</link>
+                        </links>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
                     </settings>
                     <formElements>
                         <select>
@@ -179,6 +218,21 @@
                             </settings>
                         </select>
                     </formElements>
+                </field>
+                <field name="custom_url" sortOrder="40" formElement="input">
+                    <settings>
+                        <visible>false</visible>
+                        <label translate="true">Custom Url</label>
+                        <dataType>text</dataType>
+                        <dataScope>custom_url</dataScope>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                            <rule name="validate-string" xsi:type="boolean">true</rule>
+                        </validation>
+                        <links>
+                            <link name="visible">type:value</link>
+                        </links>
+                    </settings>
                 </field>
                 <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
                     <argument name="data" xsi:type="array">
