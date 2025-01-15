@@ -1,0 +1,135 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+$sections = $block->getSections();
+
+if (!count($sections)) {
+    return null;
+}
+
+$swiperUrl = $block->getViewFileUrl('Scandiweb_ContentTypes::js/swiper.min.js');
+$swiperCssUrl = $block->getViewFileUrl('Scandiweb_ContentTypes::css/swiper.min.css');
+
+$uniqueId = '_' . uniqid('');
+
+// Content type configurations
+$title = $block->getTitle();
+$isShowAllButtonEnabled = $block->getIsShowAllEnabled();
+
+// Slider configurations
+$isSliderInfinitive = $block->getSliderInfinitive() === 'true' ? true : false;
+$isSliderShowPagination = $block->getSliderShowPagination() === 'true' ? true : false;
+$isSliderPaginationProgressbar = $block->getSliderPaginationTypeProgressbar() === 'true' ? true : false;
+$isSliderShowArrows = $block->getSliderShowArrows() === 'true' ? true : false;
+
+?>
+
+<script>
+    function initFeaturedProducts<?= $uniqueId ?>() {
+        return {
+            isLoading: true,
+
+            init() {
+                if (!window.Swiper) {
+                    this.addJsScript();
+                    this.addCss();
+                } else {
+                    this.initializeSwiper();
+                }
+            },
+            addJsScript() {
+                const self = this;
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.addEventListener('load', () => {
+                    self.initializeSwiper();
+                });
+                script.src = '<?= $escaper->escapeJs($escaper->escapeHtml($swiperUrl)) ?>';
+                document.head.appendChild(script);
+            },
+            addCss() {
+                const link = document.createElement('link');
+                link.type = 'text/css';
+                link.rel = 'stylesheet';
+                link.href = '<?= $escaper->escapeJs($escaper->escapeHtml($swiperCssUrl)) ?>';
+                document.head.appendChild(link);
+            },
+            initializeSwiper() {
+                const swiperElement = this.$refs.categoriesWrapper;
+
+                const swiper = new Swiper(swiperElement, {
+                    slidesPerView: 'auto',
+                    spaceBetween: 16,
+                    loop: <?= $isSliderInfinitive ? 'true' : 'false' ?>,
+                    loopAddBlankSlides: true,
+                    mousewheel: {
+                        forceToAxis: true
+                    },
+                    <?php if ($isSliderShowArrows): ?>
+                        navigation: {
+                            nextEl: '.swiper-button-next<?= $uniqueId ?>',
+                            prevEl: '.swiper-button-prev<?= $uniqueId ?>',
+                        },
+                    <?php endif; ?>
+                    <?php if ($isSliderShowPagination && !$isSliderPaginationProgressbar): ?>
+                        pagination: {
+                            el: '.swiper-pagination<?= $uniqueId ?>',
+                            type: 'bullets',
+                        },
+                    <?php endif; ?>
+                    <?php if ($isSliderShowPagination && $isSliderPaginationProgressbar): ?>
+                        scrollbar: {
+                            el: '.swiper-scrollbar<?= $uniqueId ?>',
+                            draggable: true,
+                        },
+                    <?php endif; ?>
+                });
+            },
+            decodeHtmlEntities(input) {
+                const tempElement = document.createElement('p');
+                tempElement.innerHTML = input;
+                return tempElement.textContent || tempElement.innerText;
+            },
+        }
+    }
+</script>
+
+<div x-data="initFeaturedProducts<?= $uniqueId ?>" class="overflow-hidden">
+    <h2 class="w-full text-center text-2xl font-bold mb-3">
+        <?= $escaper->escapeHtml($title) ?>
+    </h2>
+    <div class="swiper" x-ref="categoriesWrapper">
+        <div class="swiper-wrapper flex !py-1">
+            <?php foreach ($sections as $index => $section): ?>
+                <?php
+                $title = $section['title'];
+                $image = $section['image'];
+                $url = $section['url'];
+                ?>
+                <a href="<?= $escaper->escapeHtmlAttr($url) ?>" class="!flex flex-col gap-4 swiper-slide max-w-64 min-w-64 items-center mr-4">
+                    <img class="size-64 aspect-square" src="<?= $escaper->escapeHtmlAttr($image) ?>" alt="<?= $escaper->escapeHtmlAttr($title) ?>">
+                    <span class="w-full text-center">
+                        <?= $escaper->escapeHtml($title) ?>
+                    </span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+        <?php if ($isSliderShowArrows): ?>
+            <div class="swiper-button-prev swiper-button-prev<?= $uniqueId ?>"></div>
+            <div class="swiper-button-next swiper-button-next<?= $uniqueId ?>"></div>
+        <?php endif; ?>
+        <?php if ($isSliderShowPagination && !$isSliderPaginationProgressbar): ?>
+            <div class="swiper-pagination swiper-pagination<?= $uniqueId ?> !relative mt-3"></div>
+        <?php endif; ?>
+        <?php if ($isSliderShowPagination && $isSliderPaginationProgressbar): ?>
+            <div class="swiper-scrollbar swiper-scrollbar<?= $uniqueId ?> !relative mt-3 max-w-1/2"></div>
+        <?php endif; ?>
+    </div>
+</div>

@@ -19,9 +19,9 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Catalog\Helper\Category as CategoryHelper;
 
-class FeaturedProducts extends Template implements BlockInterface
+class FeaturedCategories extends Template implements BlockInterface
 {
-    protected $_template = 'Scandiweb_ContentTypes::content-type/featured-products.phtml';
+    protected $_template = 'Scandiweb_ContentTypes::content-type/featured-categories.phtml';
 
     /**
      * @var CategoryHelper
@@ -77,10 +77,8 @@ class FeaturedProducts extends Template implements BlockInterface
 
             $data[] = [
                 'title' => $section['section_title'],
-                'category_id' => $categoryId,
+                'image' => str_replace("\n", "", $section['section_img'][0]['url']),
                 'url' => $this->categoryHelper->getCategoryUrl($categoryUrls[$categoryId]),
-                'limit' => $section['section_products_limit'],
-                'params' => $section['section_additional_params']
             ];
         }
 
