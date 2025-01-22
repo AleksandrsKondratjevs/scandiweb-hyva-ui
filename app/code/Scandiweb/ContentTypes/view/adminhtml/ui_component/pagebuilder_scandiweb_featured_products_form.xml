@@ -13,7 +13,7 @@
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">pagebuilder_scandiweb_featured_products_form.pagebuilder_scandiweb_featured_products_form_data_source</item>
         </item>
-        <item name="label" xsi:type="string" translate="true">Scandiweb Featured products</item>
+        <item name="label" xsi:type="string" translate="true">Map</item>
     </argument>
     <settings>
         <deps>
@@ -21,12 +21,7 @@
         </deps>
         <namespace>pagebuilder_scandiweb_featured_products_form</namespace>
     </settings>
-    <dataSource name="pagebuilder_scandiweb_featured_products_form_data_source">
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_PageBuilder/js/form/provider</item>
-            </item>
-        </argument>
+    <dataSource name="pagebuilder_scandiweb_featured_products_form_data_source" component="Magento_PageBuilder/js/form/provider">
         <dataProvider name="pagebuilder_scandiweb_featured_products_form_data_source" class="Magento\PageBuilder\Model\ContentType\DataProvider">
             <settings>
                 <requestFieldName/>
@@ -34,9 +29,9 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <fieldset name="appearance_fieldset" sortOrder="10" component="Magento_PageBuilder/js/form/element/dependent-fieldset">
+    <fieldset name="appearance_fieldset" sortOrder="20" component="Magento_PageBuilder/js/form/element/dependent-fieldset">
         <settings>
-            <label translate="true">Type</label>
+            <label translate="true">Appearance</label>
             <additionalClasses>
                 <class name="admin__fieldset-visual-select-large">true</class>
             </additionalClasses>
@@ -67,13 +62,13 @@
             <formElements>
                 <select>
                     <settings>
-                        <options class="AppearanceSourceScandiwebFeaturedProducts"/>
+                        <options class="AppearanceSourceScandiwebFeaturedProducts" />
                     </settings>
                 </select>
             </formElements>
         </field>
     </fieldset>
-    <fieldset name="featured_products_data" sortOrder="10">
+    <fieldset name="main" sortOrder="10">
         <settings>
             <label translate="true">Main</label>
             <collapsible>true</collapsible>
@@ -89,7 +84,18 @@
                 </validation>
             </settings>
         </field>
-        <field name="is_show_all_enabled" sortOrder="20" formElement="checkbox">
+        <field name="sub_title" sortOrder="20" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Subtitle</label>
+                <visible>true</visible>
+                <dataScope>sub_title</dataScope>
+                <validation>
+                    <rule name="validate-string" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="is_show_all_enabled" sortOrder="30" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="default" xsi:type="string">true</item>
@@ -99,7 +105,7 @@
                 <label translate="true">Enable Show all button</label>
                 <dataType>boolean</dataType>
                 <dataScope>is_show_all_enabled</dataScope>
-                <notice translate="true">Enabling this setting will show button which will redirect to selected category</notice>
+                <notice translate="true">Enabling this setting will show button which will redirect to selected tab url</notice>
             </settings>
             <formElements>
                 <checkbox>
@@ -114,22 +120,77 @@
             </formElements>
         </field>
     </fieldset>
-    <fieldset name="sections_data" sortOrder="20">
+    <fieldset name="general" sortOrder="20">
         <settings>
-            <label translate="true">Sections</label>
-            <collapsible>true</collapsible>
-            <opened>true</opened>
+            <label/>
         </settings>
-        <dynamicRows name="products_sections">
+        <modal name="featured_products_tab_modal">
             <settings>
-                <addButtonLabel translate="true">Add Section</addButtonLabel>
-                <additionalClasses>
-                    <class name="admin__field-wide">true</class>
-                    <class name="featured-products">true</class>
-                </additionalClasses>
+                <options>
+                    <option name="title" xsi:type="string" translate="true">Add Tab</option>
+                </options>
+            </settings>
+            <insertForm name="featured_products_tab_insert_form" component="Scandiweb_ContentTypes/js/form/components/featured-products-insert-form">
+                <settings>
+                    <toolbarContainer>${ $.parentName }</toolbarContainer>
+                    <renderUrl path="mui/index/render_handle">
+                        <param name="buttons">1</param>
+                        <param name="handle">pagebuilder_scandiweb_featured_products_tab_form</param>
+                    </renderUrl>
+                    <externalProvider>${ $.ns}.pagebuilder_scandiweb_featured_products_tab_form_data_source</externalProvider>
+                    <ns>pagebuilder_scandiweb_featured_products_tab_form</ns>
+                </settings>
+            </insertForm>
+        </modal>
+        <container name="add_tab" sortOrder="10" template="ui/form/components/complex">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="content" xsi:type="string"/>
+                    <item name="label" xsi:type="string"/>
+                </item>
+            </argument>
+            <button name="add_tab_button">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">index=featured_products_tab_insert_form</item>
+                                <item name="actionName" xsi:type="string">destroyInserted</item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="targetName" xsi:type="string">index=featured_products_tab_modal</item>
+                                <item name="actionName" xsi:type="string">openModal</item>
+                            </item>
+                            <item name="2" xsi:type="array">
+                                <item name="targetName" xsi:type="string">index=featured_products_tab_insert_form</item>
+                                <item name="actionName" xsi:type="string">render</item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <title translate="true">Add Tab</title>
+                </settings>
+            </button>
+        </container>
+        <dynamicRows name="tabs" sortOrder="20" component="Scandiweb_ContentTypes/js/form/components/featured-products-dynamic-rows" template="Magento_PageBuilder/form/components/dynamic-rows/edit-form-on-click-grid">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="insertFormProvider" xsi:type="string">index = featured_products_tab_insert_form</item>
+                    <item name="modalProvider" xsi:type="string">index=featured_products_tab_modal</item>
+                    <item name="emptyContentPlaceholder" xsi:type="string">No tabs found. Click "Add Tab"</item>
+                </item>
+            </argument>
+            <settings>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
+                <identificationProperty>record_id</identificationProperty>
+                <addButton>false</addButton>
+                <visible>true</visible>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
                 <componentType>dynamicRows</componentType>
             </settings>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">
@@ -140,88 +201,82 @@
                         <item name="componentType" xsi:type="string">container</item>
                     </item>
                 </argument>
-                <field name="section_title" formElement="input" sortOrder="10">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="fit" xsi:type="boolean">false</item>
-                        </item>
-                    </argument>
-                    <settings>
-                        <validation>
-                            <rule name="required-entry" xsi:type="boolean">true</rule>
-                        </validation>
-                        <dataType>text</dataType>
-                        <label>Section Title</label>
-                    </settings>
-                </field>
-                <field name="category_id" component="Magento_Catalog/js/components/new-category" sortOrder="20" formElement="select">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="filterOptions" xsi:type="boolean">true</item>
-                            <item name="multiple" xsi:type="boolean">false</item>
-                            <item name="showCheckbox" xsi:type="boolean">false</item>
-                            <item name="disableLabel" xsi:type="boolean">true</item>
-                        </item>
-                    </argument>
-                    <settings>
-                        <validation>
-                            <rule name="required-entry" xsi:type="boolean">true</rule>
-                        </validation>
-                        <elementTmpl>ui/grid/filters/elements/ui-select</elementTmpl>
-                        <label translate="true">Category</label>
-                        <dataScope>category_id</dataScope>
-                        <componentType>field</componentType>
-                        <listens>
-                            <link name="${ $.namespace }.${ $.namespace }:responseData">setParsed</link>
-                        </listens>
-                    </settings>
-                    <formElements>
-                        <select>
-                            <settings>
-                                <options class="Magento\Catalog\Ui\Component\Product\Form\Categories\Options"/>
-                            </settings>
-                        </select>
-                    </formElements>
-                </field>
-                <field name="section_products_limit" formElement="input" sortOrder="30">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="fit" xsi:type="boolean">false</item>
-                            <item name="default" xsi:type="number">12</item>
-                        </item>
-                    </argument>
-                    <settings>
-                        <validation>
-                            <rule name="validate-digits" xsi:type="boolean">true</rule>
-                        </validation>
-                        <dataType>number</dataType>
-                        <label>Products limit</label>
-                    </settings>
-                </field>
-                <field name="section_additional_params" formElement="input" sortOrder="40">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="fit" xsi:type="boolean">false</item>
-                        </item>
-                    </argument>
+                <field name="title" component="Magento_Ui/js/form/element/text" template="Magento_PageBuilder/dynamic-rows/element/text" formElement="input">
                     <settings>
                         <dataType>text</dataType>
-                        <label>Additional parameters to url (Show All button)</label>
-                        <notice translate="true">In format: page=2&amp;brand=sony</notice>
+                        <label translate="true">Title</label>
+                        <visible>true</visible>
+                        <dataScope>title</dataScope>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                     </settings>
                 </field>
-                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="fit" xsi:type="boolean">false</item>
-                        </item>
-                    </argument>
+                <field name="tab_sort_order" component="Magento_Ui/js/form/element/text" template="Magento_PageBuilder/dynamic-rows/element/text" formElement="input">
                     <settings>
                         <dataType>text</dataType>
-                        <label>Delete</label>
-                        <componentType>actionDelete</componentType>
+                        <label translate="true">Sort order</label>
+                        <visible>true</visible>
+                        <dataScope>title</dataScope>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                     </settings>
-                </actionDelete>
+                </field>
+                <field name="condition_option" component="Magento_Ui/js/form/element/text" template="Magento_PageBuilder/dynamic-rows/element/text" formElement="input">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Condition type</label>
+                        <visible>true</visible>
+                        <dataScope>condition_option</dataScope>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                    </settings>
+                </field>
+                <field name="url" component="Magento_Ui/js/form/element/text" template="Magento_PageBuilder/dynamic-rows/element/text" formElement="input">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Url</label>
+                        <visible>true</visible>
+                        <dataScope>url</dataScope>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                    </settings>
+                </field>
+                <field name="sort_order" component="Magento_Ui/js/form/element/text" template="Magento_PageBuilder/dynamic-rows/element/text" formElement="input">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Sort order</label>
+                        <visible>true</visible>
+                        <dataScope>sort_order</dataScope>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                    </settings>
+                </field>
+                <field name="products_count" component="Magento_Ui/js/form/element/text" template="Magento_PageBuilder/dynamic-rows/element/text" formElement="input">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Products to display</label>
+                        <visible>true</visible>
+                        <dataScope>products_count</dataScope>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                    </settings>
+                </field>
+                <button name="actions" component="Magento_PageBuilder/js/form/components/action-button" template="Magento_PageBuilder/form/components/dynamic-rows/actions">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="insertFormProvider" xsi:type="string">index = featured_products_tab_insert_form</item>
+                            <item name="modalProvider" xsi:type="string">index = featured_products_tab_modal</item>
+                            <item name="noClickEdit" xsi:type="boolean">true</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">edit</item>
+                                    <item name="label" xsi:type="string" translate="true">Edit</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">deleteRecord</item>
+                                    <item name="label" xsi:type="string" translate="true">Delete</item>
+                                </item>
+                            </item>
+                            <item name="label" translate="true" xsi:type="string">Select</item>
+                        </item>
+                    </argument>
+                </button>
             </container>
         </dynamicRows>
     </fieldset>

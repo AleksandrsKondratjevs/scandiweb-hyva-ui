@@ -4,6 +4,8 @@
      css="data.main.css"
      style="min-height: 400px; display: flex; justify-content: center; align-items: center;"
      event="{ mouseover: onMouseOver, mouseout: onMouseOut }, mouseoverBubble: false">
+    <div data-bind="text: console.log(data.block_directive.attributes())"
+         hidden></div>
     <div class="featured-categories-wrapper">
         <div class="featured-categories-title"
              data-bind="liveEdit: { field: 'title', placeholder: $t('Enter Title') }">

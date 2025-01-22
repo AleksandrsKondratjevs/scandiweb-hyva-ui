@@ -1,8 +1,10 @@
 <?php
 
 /**
- * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
- * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
  */
 
 declare(strict_types=1);
@@ -104,11 +106,13 @@ $productListViewModel->addFilter('visibility', [
     ProductVisibility::VISIBILITY_IN_CATALOG,
     ProductVisibility::VISIBILITY_BOTH,
 ], 'in');
+
 if ($sortAttribute) {
     $sortDirection === 'ASC'
         ? $productListViewModel->addAscendingSortOrder($sortAttribute)
         : $productListViewModel->addDescendingSortOrder($sortAttribute);
 }
+
 
 if (in_array($type, ['related', 'upsell', 'crosssell'], true)) {
 

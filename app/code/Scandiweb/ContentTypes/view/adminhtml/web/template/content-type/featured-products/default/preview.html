@@ -4,58 +4,62 @@
      css="data.main.css"
      style="min-height: 400px; display: flex; justify-content: center; align-items: center;"
      event="{ mouseover: onMouseOver, mouseout: onMouseOut }, mouseoverBubble: false">
-    <div class="featured-products-wrapper">
-        <div class="featured-products-title"
-             data-bind="liveEdit: { field: 'title', placeholder: $t('Enter Title') }">
-        </div>
-        <if
-            args="data.products_sections.attributes().cards.length > 0 && data.products_sections.attributes().cards !== '[]'">
-            <div class="featured-products-category-wrapper"
-                 data-bind="attr: { cards: JSON.stringify(data.products_sections.attributes().cards) }"
-                 data-element="products_sections">
-                <!-- ko foreach: data.products_sections.attributes().cards -->
-                <div class="featured-products-category-button"
-                     data-bind="text: section_title, css: { 'featured-products-category-button-active': $index() === 0 }">
-                </div>
-                <!-- /ko -->
-            </div>
-            <div
-                 class="featured-products-placeholders-wrapper">
-                <!-- ko foreach: new Array(4) -->
-                <div class="featured-products-placeholder">
+     <div class="featured-products-wrapper">
+          <div class="featured-products-title"
+               data-bind="liveEdit: { field: 'title', placeholder: $t('Enter Title') }">
+          </div>
+          <div class="featured-products-sub-title"
+               data-bind="liveEdit: { field: 'sub_title', placeholder: $t('Enter Subtitle') }">
+          </div>
+          <if
+              args="data.main.attributes()['data-tabs'] && JSON.parse(data.main.attributes()['data-tabs'])?.length">
+               <div class="featured-products-category-wrapper"
+                    data-bind="attr: { cards: data.main.attributes()['data-tabs'] }"
+                    data-element="products_sections">
+                    <!-- ko foreach: JSON.parse(data.main.attributes()['data-tabs']) -->
+                    <div class="featured-products-category-button"
+                         data-bind="text: title, css: { 'featured-products-category-button-active': $index() === 0 }">
+                    </div>
+                    <!-- /ko -->
+               </div>
+               <div
+                    class="featured-products-placeholders-wrapper">
+                    <!-- ko foreach: new Array(4) -->
                     <div
-                         class="featured-products-placeholder-image">
+                         class="featured-products-placeholder">
+                         <div
+                              class="featured-products-placeholder-image">
 
+                         </div>
+                         <div
+                              class="featured-products-placeholder-title">
+                              Product name
+                         </div>
+                         <div
+                              class="featured-products-placeholder-price">
+                              $33.00
+                         </div>
+                         <div
+                              class="featured-products-placeholder-cart">
+                              Add to Cart
+                         </div>
                     </div>
-                    <div
-                         class="featured-products-placeholder-title">
-                        Product name
-                    </div>
-                    <div
-                         class="featured-products-placeholder-price">
-                        $33.00
-                    </div>
-                    <div
-                         class="featured-products-placeholder-cart">
-                        Add to Cart
-                    </div>
-                </div>
-                <!-- /ko -->
-            </div>
+                    <!-- /ko -->
+               </div>
 
-        </if>
-        <if
-            args="data.products_sections.attributes().cards.length === 0 || data.products_sections.attributes().cards === '[]'">
-            <p class="featured-products-no-sections">
-                Please fill sections!
-            </p>
-        </if>
-        <if
-            args="data.main.attributes().is_show_all_enabled === 'true'">
-            <div class="featured-products-show-all">
-                Show All
-            </div>
-        </if>
-    </div>
-    <render args="getOptions().template" />
+          </if>
+          <if
+              args="!data.main.attributes()['data-tabs'] || !JSON.parse(data.main.attributes()['data-tabs'])?.length">
+               <p class="featured-products-no-sections">
+                    Please fill sections!
+               </p>
+          </if>
+          <if
+              args="data.main.attributes().is_show_all_enabled === 'true'">
+               <div class="featured-products-show-all">
+                    Show All
+               </div>
+          </if>
+     </div>
+     <render args="getOptions().template" />
 </div>

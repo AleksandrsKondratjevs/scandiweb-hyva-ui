@@ -1,7 +1,6 @@
-define([
-    "Scandiweb_ContentTypes/js/content-type/block-directive",
-    "Scandiweb_ContentTypes/js/helper/link",
-], function (BlockDirectiveBase) {
+define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
+    BlockDirectiveBase
+) {
     "use strict";
     const $super = BlockDirectiveBase.prototype;
 

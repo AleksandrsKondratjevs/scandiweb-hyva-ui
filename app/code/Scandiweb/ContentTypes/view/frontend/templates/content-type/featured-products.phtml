@@ -21,6 +21,7 @@ $uniqueId = '_' . uniqid('');
 
 // Content type configurations
 $title = $block->getTitle();
+$subTitle = $block->getSubTitle();
 $isShowAllButtonEnabled = $block->getIsShowAllEnabled();
 
 // Slider configurations
@@ -34,7 +35,8 @@ $isSliderShowArrows = $block->getSliderShowArrows();
 <script>
     function initFeaturedProducts<?= $uniqueId ?>() {
         return {
-            selectedCategory: <?= json_encode($sections[0]) ?>,
+            selectedTab: <?= json_encode($sections[0]) ?>,
+            selectedTabIndex: 0,
             isLoading: true,
 
             init() {
@@ -47,7 +49,7 @@ $isSliderShowArrows = $block->getSliderShowArrows();
 
                 this.fetchProducts();
 
-                this.$watch('selectedCategory', () => {
+                this.$watch('selectedTab', () => {
                     this.fetchProducts();
                 })
             },
@@ -83,9 +85,10 @@ $isSliderShowArrows = $block->getSliderShowArrows();
                 // Requires to not show loader in case if content is cached and comes fast
                 const loaderTimeout = setTimeout(() => this.isLoading = true, 200);
 
-                const url = 'scandiweb/ContentType/GetFeaturedProducts?' + new URLSearchParams({
-                    category_id: this.selectedCategory.category_id,
-                    products_limit: this.selectedCategory.limit,
+                const parameters = {
+                    products_limit: this.selectedTab.limit,
+                    condition_type: this.selectedTab.condition_option,
+                    sort_order: this.selectedTab.sort_order,
                     <?php if ($isSliderInfinitive === 'true'): ?>
                         is_slider_infinitive: true,
                     <?php endif; ?>
@@ -98,7 +101,23 @@ $isSliderShowArrows = $block->getSliderShowArrows();
                     <?php if ($isSliderShowArrows === 'true'): ?>
                         is_slider_show_arrows: true,
                     <?php endif; ?>
-                });
+                };
+
+                switch (this.selectedTab.condition_option) {
+                    case 'category_ids':
+                        parameters.category_id = this.selectedTab.category_id;
+                        break;
+                    case 'sku':
+                        parameters.sku = this.selectedTab.sku;
+                        break;
+                    case 'condition':
+                        parameters.conditions = this.selectedTab.conditions;
+                        break;
+                }
+
+
+
+                const url = 'scandiweb/ContentType/GetFeaturedProducts?' + new URLSearchParams(parameters);
 
                 fetch(url, {
                     method: "GET",
@@ -149,8 +168,9 @@ $isSliderShowArrows = $block->getSliderShowArrows();
 
                 this.$refs.productsSliderContainer.replaceChild(contentNode, this.$refs.productsSliderContainer.firstChild);
             },
-            handleCategorySelect(sectionData) {
-                this.selectedCategory = sectionData;
+            handleCategorySelect(sectionData, index) {
+                this.selectedTab = sectionData;
+                this.selectedTabIndex = index;
             },
             decodeHtmlEntities(input) {
                 const tempElement = document.createElement('p');
@@ -158,35 +178,41 @@ $isSliderShowArrows = $block->getSliderShowArrows();
                 return tempElement.textContent || tempElement.innerText;
             },
             getUrl() {
-                if (!this.selectedCategory?.params) {
-                    return this.selectedCategory.url;
+                if (!this.selectedTab?.params) {
+                    return this.selectedTab.url;
                 }
 
-                const decodedParams = this.decodeHtmlEntities(this.selectedCategory.params);
-                return this.selectedCategory.url + '?' + decodedParams;
+                const decodedParams = this.decodeHtmlEntities(this.selectedTab.params);
+                return this.selectedTab.url + '?' + decodedParams;
             }
         }
     }
 </script>
 
 <div x-data="initFeaturedProducts<?= $uniqueId ?>">
-    <h2 class="w-full text-center text-2xl font-bold mb-3">
-        <?= $escaper->escapeHtml($title) ?>
-    </h2>
+    <?php if ($title): ?>
+        <h2 class="w-full text-center text-2xl font-bold mb-3">
+            <?= $escaper->escapeHtml($title) ?>
+        </h2>
+    <?php endif; ?>
+    <?php if ($subTitle): ?>
+        <p class="w-full text-center text-base mb-3">
+            <?= $escaper->escapeHtml($subTitle) ?>
+        </p>
+    <?php endif; ?>
     <div class="swiper" x-ref="categoriesWrapper">
         <div class="swiper-wrapper flex overflow-hidden !py-1">
             <?php foreach ($sections as $index => $section): ?>
                 <?php
-                $id = $section['category_id'];
                 $title = $section['title'];
                 ?>
                 <button
                     class="btn <?= $index === 0 ? 'btn-primary' : 'btn-secondary' ?> swiper-slide !max-w-max min-w-max mr-4"
                     :class="{
-                        'btn-primary': selectedCategory.category_id == <?= $id ?>,
-                        'btn-secondary': selectedCategory.category_id != <?= $id ?>
+                        'btn-primary': <?= $index ?> === selectedTabIndex,
+                        'btn-secondary': <?= $index ?> !== selectedTabIndex,
                     }"
-                    @click="handleCategorySelect(<?= $escaper->escapeHtmlAttr(json_encode($section)) ?>)">
+                    @click="handleCategorySelect(<?= $escaper->escapeHtmlAttr(json_encode($section)) ?>, <?= $index ?>)">
                     <?= $escaper->escapeHtml($title) ?>
                 </button>
             <?php endforeach; ?>
@@ -201,7 +227,7 @@ $isSliderShowArrows = $block->getSliderShowArrows();
         </div>
     </div>
     <?php if ($isShowAllButtonEnabled === 'true'): ?>
-        <a class="btn btn-secondary w-max mx-auto" :href="getUrl" x-text="'<?= __('Shop All') ?> ' + decodeHtmlEntities(selectedCategory.title)">
+        <a class="btn btn-secondary w-max mx-auto" :href="getUrl" x-text="'<?= __('Shop All') ?> ' + decodeHtmlEntities(selectedTab.title)">
             <?= __('Shop All') . ' ' . $sections[0]['title'] ?>
         </a>
     <?php endif; ?>

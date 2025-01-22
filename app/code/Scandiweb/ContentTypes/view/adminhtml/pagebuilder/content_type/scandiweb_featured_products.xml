@@ -34,13 +34,12 @@
 						<attribute name="appearance" source="data-appearance" />
 						<attribute name="is_show_all_enabled" source="is_show_all_enabled"/>
 						<attribute name="title" source="title"/>
+						<attribute name="sub_title" source="sub_title"/>
 						<attribute name="slider_infinitive" source="slider_infinitive"/>
 						<attribute name="slider_show_pagination" source="slider_show_pagination"/>
 						<attribute name="slider_pagination_type_progressbar" source="slider_pagination_type_progressbar"/>
 						<attribute name="slider_show_arrows" source="slider_show_arrows"/>
-					</element>
-					<element name="products_sections">
-						<attribute name="products_sections" source="cards" converter="Scandiweb_ContentTypes/js/content-type/map/converter/attribute/array" />
+						<attribute name="tabs" source="data-tabs" converter="Scandiweb_ContentTypes/js/content-type/featured-products/converter/attribute/tabs"/>
 					</element>
 					<element name="block_directive">
 						<html name="block_directive" converter="Magento_PageBuilder/js/converter/html/tag-escaper" />

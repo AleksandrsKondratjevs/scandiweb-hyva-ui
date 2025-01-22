@@ -95,11 +95,6 @@ class FeaturedCategories extends Template implements BlockInterface
             }
         }
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $logger = $objectManager->create('\Psr\Log\LoggerInterface');
-        $logger->info("test", (array)$data);
-
-
         return $data;
     }
 }

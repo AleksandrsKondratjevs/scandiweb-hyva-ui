@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Umniah
+ * @package   Umniah_Bundle
+ * @author    Amr Osama <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Scandiweb\ContentTypes\Controller\ContentType\GetFeaturedProducts">
+        <arguments>
+            <argument name="sortOptions" xsi:type="array">
+                <item name="position" xsi:type="array">
+                    <item name="position" xsi:type="string">ASC</item>
+                </item>
+                <item name="position_by_sku" xsi:type="array">
+                    <item name="position" xsi:type="string">ASC</item>
+                </item>
+                <item name="date_newest_top" xsi:type="array">
+                    <item name="entity_id" xsi:type="string">ASC</item>
+                </item>
+                <item name="date_oldest_top" xsi:type="array">
+                    <item name="entity_id" xsi:type="string">DESC</item>
+                </item>
+                <item name="name_ascending" xsi:type="array">
+                    <item name="name" xsi:type="string">ASC</item>
+                </item>
+                <item name="name_descending" xsi:type="array">
+                    <item name="name" xsi:type="string">DESC</item>
+                </item>
+                <item name="sku_ascending" xsi:type="array">
+                    <item name="sku" xsi:type="string">ASC</item>
+                </item>
+                <item name="sku_descending" xsi:type="array">
+                    <item name="sku" xsi:type="string">DESC</item>
+                </item>
+                <item name="low_stock_first" xsi:type="array">
+                    <item name="quantity_and_stock_status" xsi:type="string">ASC</item>
+                </item>
+                <item name="high_stock_first" xsi:type="array">
+                    <item name="quantity_and_stock_status" xsi:type="string">DESC</item>
+                </item>
+                <item name="price_low_to_high" xsi:type="array">
+                    <item name="price" xsi:type="string">ASC</item>
+                </item>
+                <item name="price_high_to_low" xsi:type="array">
+                    <item name="price" xsi:type="string">DESC</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

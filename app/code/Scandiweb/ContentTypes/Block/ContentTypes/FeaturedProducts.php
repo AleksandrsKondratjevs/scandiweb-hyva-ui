@@ -54,33 +54,26 @@ class FeaturedProducts extends Template implements BlockInterface
     public function getSections(): array
     {
         $data = [];
-        $categoryIDs = [];
 
-        $sectionData = $this->getData(('cards'));
+        $tabsData = $this->getData(('tabs'));
 
-        if (!$sectionData) {
+        if (!$tabsData) {
             return [];
         }
 
-        $sectionData = str_replace('&amp;quote;', '"', $sectionData);
-        $sectionData = $this->serializer->unserialize($sectionData);
+        $tabsData = str_replace('&amp;quote;', '"', $tabsData);
+        $tabsData = $this->serializer->unserialize($tabsData);
 
-        foreach ($sectionData as $section) {
-            $categoryIDs[] = (int) $section['category_id'];
-        }
-
-        $collection = $this->categoryCollection->create()->addFieldToSelect('url_path')->addFieldToFilter('entity_id', ['in' => $categoryIDs]);
-        $categoryUrls = $collection->getItems();
-
-        foreach ($sectionData as $section) {
-            $categoryId = $section['category_id'];
-
+        foreach ($tabsData as $section) {
             $data[] = [
-                'title' => $section['section_title'],
-                'category_id' => $categoryId,
-                'url' => $this->categoryHelper->getCategoryUrl($categoryUrls[$categoryId]),
-                'limit' => $section['section_products_limit'],
-                'params' => $section['section_additional_params']
+                'title' => $section['title'],
+                'url' => $section['url'],
+                'limit' => $section['products_count'],
+                'condition_option' => $section['condition_option'],
+                'sort_order' => $section['sort_order'],
+                'category_id' => isset($section['category_id']) ? $section['category_id'] : null,
+                'sku' =>  isset($section['sku']) ? $section['sku'] : null,
+                'conditions' =>  isset($section['conditions']) ? $section['conditions'] : null,
             ];
         }
 
