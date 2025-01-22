@@ -215,7 +215,7 @@
                         <dataType>text</dataType>
                         <label translate="true">Sort order</label>
                         <visible>true</visible>
-                        <dataScope>title</dataScope>
+                        <dataScope>tab_sort_order</dataScope>
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                     </settings>
                 </field>
@@ -240,7 +240,7 @@
                 <field name="sort_order" component="Magento_Ui/js/form/element/text" template="Magento_PageBuilder/dynamic-rows/element/text" formElement="input">
                     <settings>
                         <dataType>text</dataType>
-                        <label translate="true">Sort order</label>
+                        <label translate="true">Products sort order</label>
                         <visible>true</visible>
                         <dataScope>sort_order</dataScope>
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
