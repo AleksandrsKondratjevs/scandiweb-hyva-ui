@@ -4,35 +4,37 @@
      css="data.main.css"
      style="min-height: 400px; display: flex; justify-content: center; align-items: center;"
      event="{ mouseover: onMouseOver, mouseout: onMouseOut }, mouseoverBubble: false">
-    <div data-bind="text: console.log(data.block_directive.attributes())"
-         hidden></div>
-    <div class="featured-categories-wrapper">
-        <div class="featured-categories-title"
-             data-bind="liveEdit: { field: 'title', placeholder: $t('Enter Title') }">
-        </div>
-        <if
-            args="data.categories_sections.attributes().cards.length > 0 && data.categories_sections.attributes().cards !== '[]'">
-            <div class="featured-categories-content-wrapper"
-                 data-bind="attr: { cards: JSON.stringify(data.categories_sections.attributes().cards) }"
-                 data-element="categories_sections">
-                <!-- ko foreach: data.categories_sections.attributes().cards -->
-                <div
-                     class="featured-categories-content-container">
-                    <img class="featured-categories-content-image"
-                         data-bind="attr: { src: section_img[0]?.url, alt: 'Category Image' }" />
-                    <div class="featured-categories-content-title"
-                         data-bind="text: section_title">
+     <div class="featured-categories-wrapper">
+          <div class="featured-categories-title"
+               data-bind="liveEdit: { field: 'title', placeholder: $t('Enter Title') }">
+          </div>
+          <div class="featured-categories-sub-title"
+               data-bind="liveEdit: { field: 'sub_title', placeholder: $t('Enter Subtitle') }">
+          </div>
+          <if
+              args="data.categories_sections.attributes().cards.length > 0 && data.categories_sections.attributes().cards !== '[]'">
+               <div class="featured-categories-content-wrapper"
+                    data-bind="attr: { cards: JSON.stringify(data.categories_sections.attributes().cards) }"
+                    data-element="categories_sections">
+                    <!-- ko foreach: data.categories_sections.attributes().cards -->
+                    <div
+                         class="featured-categories-content-container">
+                         <img class="featured-categories-content-image"
+                              data-bind="attr: { src: section_img[0]?.url, alt: 'Category Image' }" />
+                         <div class="featured-categories-content-title"
+                              data-bind="text: section_title">
+                         </div>
                     </div>
-                </div>
-                <!-- /ko -->
-            </div>
-        </if>
-        <if
-            args="data.categories_sections.attributes().cards.length === 0 || data.categories_sections.attributes().cards === '[]'">
-            <p class="featured-categories-no-sections">
-                Please fill sections!
-            </p>
-        </if>
-    </div>
-    <render args="getOptions().template" />
+                    <!-- /ko -->
+               </div>
+          </if>
+          <if
+              args="data.categories_sections.attributes().cards.length === 0 || data.categories_sections.attributes().cards === '[]'">
+               <span
+                     class="featured-categories-no-sections">
+                    Please fill sections!
+               </span>
+          </if>
+     </div>
+     <render args="getOptions().template" />
 </div>

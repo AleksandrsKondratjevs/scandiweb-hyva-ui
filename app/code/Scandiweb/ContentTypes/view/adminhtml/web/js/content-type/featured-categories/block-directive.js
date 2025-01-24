@@ -17,6 +17,7 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
     ) {
         const {
             title,
+            sub_title,
             slider_infinitive,
             slider_show_pagination,
             slider_pagination_type_progressbar,
@@ -26,6 +27,7 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
 
         var attributes = {
             title,
+            sub_title,
             slider_infinitive,
             slider_show_pagination,
             slider_pagination_type_progressbar,

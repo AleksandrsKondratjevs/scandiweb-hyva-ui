@@ -24,12 +24,11 @@
                </div>
                <div
                     class="featured-products-placeholders-wrapper">
-                    <!-- ko foreach: new Array(4) -->
+                    <!-- ko foreach: new Array(5) -->
                     <div
                          class="featured-products-placeholder">
                          <div
                               class="featured-products-placeholder-image">
-
                          </div>
                          <div
                               class="featured-products-placeholder-title">
@@ -50,9 +49,9 @@
           </if>
           <if
               args="!data.main.attributes()['data-tabs'] || !JSON.parse(data.main.attributes()['data-tabs'])?.length">
-               <p class="featured-products-no-sections">
+               <span class="featured-products-no-sections">
                     Please fill sections!
-               </p>
+               </span>
           </if>
           <if
               args="data.main.attributes().is_show_all_enabled === 'true'">

@@ -116,6 +116,11 @@
                                 <item name="value" xsi:type="string">condition</item>
                                 <item name="title" xsi:type="string" translate="true">Condition</item>
                             </option>
+                            <option name="3" xsi:type="array">
+                                <item name="size" xsi:type="string">small</item>
+                                <item name="value" xsi:type="string">best_sellers</item>
+                                <item name="title" xsi:type="string" translate="true">Best Sellers</item>
+                            </option>
                         </options>
                     </settings>
                 </select>

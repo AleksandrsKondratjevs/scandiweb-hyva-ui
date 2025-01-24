@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+$sections = $block->getSections();
+
+if (!count($sections)) {
+    return null;
+}
+
+$uniqueId = '_' . uniqid('');
+
+// Content type configurations
+$title = $block->getTitle();
+$subTitle = $block->getSubTitle();
+$isShowAllButtonEnabled = $block->getIsShowAllEnabled();
+
+?>
+
+<script>
+    function initFeaturedCategoriesGrid<?= $uniqueId ?>() {
+        return {
+            isLoading: true,
+            decodeHtmlEntities(input) {
+                const tempElement = document.createElement('p');
+                tempElement.innerHTML = input;
+                return tempElement.textContent || tempElement.innerText;
+            },
+        }
+    }
+</script>
+
+<div x-data="initFeaturedCategoriesGrid<?= $uniqueId ?>" class="overflow-hidden">
+    <?php if ($title): ?>
+        <h2 class="w-full text-center text-2xl font-bold mb-3">
+            <?= $escaper->escapeHtml($title) ?>
+        </h2>
+    <?php endif; ?>
+    <?php if ($subTitle): ?>
+        <p class="w-full text-center text-base mb-3">
+            <?= $escaper->escapeHtml($subTitle) ?>
+        </p>
+    <?php endif; ?>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <?php foreach ($sections as $index => $section): ?>
+            <?php
+            $title = $section['title'];
+            $image = $section['image'];
+            $url = $section['url'];
+            ?>
+            <a href="<?= $escaper->escapeHtmlAttr($url) ?>" class="flex flex-col gap-4 items-center">
+                <img class="w-full aspect-square" src="<?= $escaper->escapeHtmlAttr($image) ?>" alt="<?= $escaper->escapeHtmlAttr($title) ?>">
+                <span class="w-full text-center">
+                    <?= $escaper->escapeHtml($title) ?>
+                </span>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</div>
+</div>
+</div>

@@ -1,0 +1,39 @@
+<div attr="data.main.attributes"
+     ko-style="data.main.style"
+     class="pagebuilder-content-type featured-categories"
+     css="data.main.css"
+     style="min-height: 400px; display: flex; justify-content: center; align-items: center;"
+     event="{ mouseover: onMouseOver, mouseout: onMouseOut }, mouseoverBubble: false">
+    <div class="featured-categories-wrapper">
+        <div class="featured-categories-title"
+             data-bind="liveEdit: { field: 'title', placeholder: $t('Enter Title') }">
+        </div>
+        <div class="featured-categories-sub-title"
+             data-bind="liveEdit: { field: 'sub_title', placeholder: $t('Enter Subtitle') }">
+        </div>
+        <if
+            args="data.categories_sections.attributes().cards.length > 0 && data.categories_sections.attributes().cards !== '[]'">
+            <div class="featured-categories-grid-content-wrapper"
+                 data-bind="attr: { cards: JSON.stringify(data.categories_sections.attributes().cards) }"
+                 data-element="categories_sections">
+                <!-- ko foreach: data.categories_sections.attributes().cards -->
+                <div
+                     class="featured-categories-content-container">
+                    <img class="featured-categories-content-image"
+                         data-bind="attr: { src: section_img[0]?.url, alt: 'Category Image' }" />
+                    <div class="featured-categories-content-title"
+                         data-bind="text: section_title">
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+        </if>
+        <if
+            args="data.categories_sections.attributes().cards.length === 0 || data.categories_sections.attributes().cards === '[]'">
+            <span class="featured-categories-no-sections">
+                Please fill sections!
+            </span>
+        </if>
+    </div>
+    <render args="getOptions().template" />
+</div>

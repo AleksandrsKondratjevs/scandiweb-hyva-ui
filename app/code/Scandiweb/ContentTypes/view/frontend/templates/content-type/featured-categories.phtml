@@ -21,6 +21,7 @@ $uniqueId = '_' . uniqid('');
 
 // Content type configurations
 $title = $block->getTitle();
+$subTitle = $block->getSubTitle();
 $isShowAllButtonEnabled = $block->getIsShowAllEnabled();
 
 // Slider configurations
@@ -32,7 +33,7 @@ $isSliderShowArrows = $block->getSliderShowArrows() === 'true' ? true : false;
 ?>
 
 <script>
-    function initFeaturedProducts<?= $uniqueId ?>() {
+    function initFeaturedCategories<?= $uniqueId ?>() {
         return {
             isLoading: true,
 
@@ -101,10 +102,17 @@ $isSliderShowArrows = $block->getSliderShowArrows() === 'true' ? true : false;
     }
 </script>
 
-<div x-data="initFeaturedProducts<?= $uniqueId ?>" class="overflow-hidden">
-    <h2 class="w-full text-center text-2xl font-bold mb-3">
-        <?= $escaper->escapeHtml($title) ?>
-    </h2>
+<div x-data="initFeaturedCategories<?= $uniqueId ?>" class="overflow-hidden">
+    <?php if ($title): ?>
+        <h2 class="w-full text-center text-2xl font-bold mb-3">
+            <?= $escaper->escapeHtml($title) ?>
+        </h2>
+    <?php endif; ?>
+    <?php if ($subTitle): ?>
+        <p class="w-full text-center text-base mb-3">
+            <?= $escaper->escapeHtml($subTitle) ?>
+        </p>
+    <?php endif; ?>
     <div class="swiper" x-ref="categoriesWrapper">
         <div class="swiper-wrapper flex !py-1">
             <?php foreach ($sections as $index => $section): ?>

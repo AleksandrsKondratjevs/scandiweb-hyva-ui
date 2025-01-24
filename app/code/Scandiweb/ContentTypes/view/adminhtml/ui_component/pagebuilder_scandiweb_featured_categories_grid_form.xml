@@ -11,23 +11,23 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd" extends="pagebuilder_base_form">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">pagebuilder_scandiweb_featured_categories_form.pagebuilder_scandiweb_featured_categories_form_data_source</item>
+            <item name="provider" xsi:type="string">pagebuilder_scandiweb_featured_categories_grid_form.pagebuilder_scandiweb_featured_categories_grid_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Scandiweb Featured categories</item>
     </argument>
     <settings>
         <deps>
-            <dep>pagebuilder_scandiweb_featured_categories_form.pagebuilder_scandiweb_featured_categories_form_data_source</dep>
+            <dep>pagebuilder_scandiweb_featured_categories_grid_form.pagebuilder_scandiweb_featured_categories_grid_form_data_source</dep>
         </deps>
-        <namespace>pagebuilder_scandiweb_featured_categories_form</namespace>
+        <namespace>pagebuilder_scandiweb_featured_categories_grid_form</namespace>
     </settings>
-    <dataSource name="pagebuilder_scandiweb_featured_categories_form_data_source">
+    <dataSource name="pagebuilder_scandiweb_featured_categories_grid_form_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_PageBuilder/js/form/provider</item>
             </item>
         </argument>
-        <dataProvider name="pagebuilder_scandiweb_featured_categories_form_data_source" class="Magento\PageBuilder\Model\ContentType\DataProvider">
+        <dataProvider name="pagebuilder_scandiweb_featured_categories_grid_form_data_source" class="Magento\PageBuilder\Model\ContentType\DataProvider">
             <settings>
                 <requestFieldName/>
                 <primaryFieldName/>
@@ -258,104 +258,5 @@
                 </actionDelete>
             </container>
         </dynamicRows>
-    </fieldset>
-    <fieldset name="slider_configurations" sortOrder="30">
-        <settings>
-            <label translate="true">Slider Configurations</label>
-            <collapsible>true</collapsible>
-            <opened>true</opened>
-        </settings>
-        <field name="slider_infinitive" sortOrder="10" formElement="checkbox">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="string">false</item>
-                </item>
-            </argument>
-            <settings>
-                <label translate="true">Infinitive</label>
-                <dataType>boolean</dataType>
-                <dataScope>slider_infinitive</dataScope>
-            </settings>
-            <formElements>
-                <checkbox>
-                    <settings>
-                        <valueMap>
-                            <map name="false" xsi:type="string">false</map>
-                            <map name="true" xsi:type="string">true</map>
-                        </valueMap>
-                        <prefer>toggle</prefer>
-                    </settings>
-                </checkbox>
-            </formElements>
-        </field>
-        <field name="slider_show_pagination" sortOrder="20" formElement="checkbox">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="string">true</item>
-                </item>
-            </argument>
-            <settings>
-                <label translate="true">Show Pagination</label>
-                <dataType>boolean</dataType>
-                <dataScope>slider_show_pagination</dataScope>
-            </settings>
-            <formElements>
-                <checkbox>
-                    <settings>
-                        <valueMap>
-                            <map name="false" xsi:type="string">false</map>
-                            <map name="true" xsi:type="string">true</map>
-                        </valueMap>
-                        <prefer>toggle</prefer>
-                    </settings>
-                </checkbox>
-            </formElements>
-        </field>
-        <field name="slider_pagination_type_progressbar" sortOrder="30" formElement="checkbox">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="string">false</item>
-                </item>
-            </argument>
-            <settings>
-                <label translate="true">Pagination as progress bar</label>
-                <dataType>boolean</dataType>
-                <dataScope>slider_pagination_type_progressbar</dataScope>
-            </settings>
-            <formElements>
-                <checkbox>
-                    <settings>
-                        <valueMap>
-                            <map name="false" xsi:type="string">false</map>
-                            <map name="true" xsi:type="string">true</map>
-                        </valueMap>
-                        <prefer>toggle</prefer>
-                    </settings>
-                </checkbox>
-            </formElements>
-        </field>
-        <field name="slider_show_arrows" sortOrder="40" formElement="checkbox">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="string">true</item>
-                </item>
-            </argument>
-            <settings>
-                <label translate="true">Show arrows</label>
-                <dataType>boolean</dataType>
-                <dataScope>slider_show_arrows</dataScope>
-            </settings>
-            <formElements>
-                <checkbox>
-                    <settings>
-                        <valueMap>
-                            <map name="false" xsi:type="string">false</map>
-                            <map name="true" xsi:type="string">true</map>
-                        </valueMap>
-                        <prefer>toggle</prefer>
-                    </settings>
-                </checkbox>
-            </formElements>
-        </field>
     </fieldset>
 </form>
