@@ -1,0 +1,44 @@
+<div attr="data.main.attributes"
+     ko-style="data.main.style"
+     class="pagebuilder-content-type faq"
+     css="active: isVisible()"
+     event="{ mouseover: onMouseOver, mouseout: onMouseOut }, mouseoverBubble: false">
+    <div class="faq-wrapper">
+        <div class="faq-title"
+             data-bind="liveEdit: { field: 'title', placeholder: $t('Enter Title') }">
+        </div>
+        <div class="faq-sub-title"
+             data-bind="liveEdit: { field: 'sub_title', placeholder: $t('Enter Subtitle') }">
+        </div>
+        <if
+            args="data.faq_sections.attributes().cards.length > 0 && data.faq_sections.attributes().cards !== '[]'">
+            <div class="faq-content-wrapper"
+                 data-bind="attr: { cards: JSON.stringify(data.faq_sections.attributes().cards) }"
+                 data-element="faq_sections">
+                <!-- ko foreach: data.faq_sections.attributes().cards -->
+                <div class="faq-content-container">
+                    <div class="faq-content-title-wrapper">
+
+                        <div class="faq-content-title"
+                             data-bind="text: section_title">
+                        </div>
+                        <div class="faq-content-chevron">
+                        </div>
+                    </div>
+
+                    <div class="faq-content"
+                         data-bind="html: section_content, visible: $index() === 0">
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+        </if>
+        <if
+            args="data.faq_sections.attributes().cards.length === 0 || data.faq_sections.attributes().cards === '[]'">
+            <span class="faq-no-sections">
+                Please fill sections!
+            </span>
+        </if>
+    </div>
+    <render args="getOptions().template" />
+</div>

@@ -1,0 +1,75 @@
+.faq {
+    min-height: 400px;
+    display: none;
+
+    &.active {
+        display: block;
+    }
+
+    &-wrapper {
+        padding: 20px;
+
+        .faq-container {
+            margin-top: 20px;
+        }
+    }
+
+    &-title {
+        font-size: 20px;
+        line-height: 28px;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    &-sub-title {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: 500;
+        text-align: center;
+        margin-block: 20px;
+    }
+
+    &-content {
+        padding-inline: 16px;
+        display: block;
+
+        &-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 8px;
+            border-bottom: 1px solid rgb(188, 186, 186);
+
+            &:first-of-type {
+                border-top: 1px solid rgb(188, 186, 186);
+            }
+        }
+
+        &-title {
+            font-size: 18px;
+            line-height: 24px;
+            font-weight: 500;
+
+            &-wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        &-chevron {
+            position: relative;
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 13.1l-8-8 2.1-2.2 5.9 5.9 5.9-5.9 2.1 2.2z'/%3E%3C/svg%3E");
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    }
+}

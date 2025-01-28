@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+?>
+
+<script>
+    const faqMultiple = () => {
+        return {
+            activeTab: 0,
+            tabsData: [],
+
+            init() {
+                this.gatherTabs();
+            },
+            gatherTabs() {
+                this.$el.querySelectorAll('[data-content-type="scandiweb_faq"]').forEach((faq) => {
+                    const tabName = faq.getAttribute('faq_tab_name');
+
+                    this.tabsData.push(tabName);
+                })
+            },
+            handleActiveTab(index) {
+                this.activeTab = index;
+            }
+        }
+    }
+
+    (() => {
+        document.querySelectorAll('[data-content-type="faq_multiple"]').forEach((faqTab) => {
+            faqTab.setAttribute('x-data', 'faqMultiple()');
+
+            faqTab.querySelectorAll('[data-content-type="scandiweb_faq"]').forEach((faq, index) => {
+                faq.setAttribute('tab-index', index);
+            });
+
+            const tabsWrapper = faqTab.querySelector('.faq-multiple-tabs-wrapper');
+
+            tabsWrapper.insertAdjacentHTML(
+                'beforeend',
+                '<?= $escaper->escapeJs($block->getBlockHtml('pagebuilder.faq_multiple.tabs')) ?>'
+            );
+        })
+    })();
+</script>

@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$sections = $block->getSections();
+
+if (!count($sections)) {
+    return null;
+}
+
+$uniqueId = '_' . uniqid('');
+
+// Content type configurations
+$title = $block->getTitle();
+$subTitle = $block->getSubTitle();
+$isShowAllButtonEnabled = $block->getIsShowAllEnabled();
+
+$index = $block->getTabIndex();
+
+?>
+
+<script>
+    function faqWrapper<?= $uniqueId ?>() {
+        return {
+            tabIndex: null,
+            activeTabIndex: 0,
+
+            init() {
+                const parent = this.$el.closest('[tab-index]');
+
+                if (parent) {
+                    const tabIndex = parent.getAttribute('tab-index');
+                    this.tabIndex = Number(tabIndex);
+
+                    this.$watch('activeTab', (activeTab) => {
+                        this.activeTabIndex = activeTab;
+                    })
+                }
+            },
+        }
+    }
+
+    function faqAccordion<?= $uniqueId ?>() {
+        return {
+            isOpen: false,
+
+            init() {
+                this.$watch('activeTabIndex', () => {
+                    this.isOpen = false;
+                })
+            }
+        }
+    }
+</script>
+
+<div
+    class="py-10"
+    x-cloak
+    x-data="faqWrapper<?= $uniqueId ?>()"
+    x-show="typeof activeTab !== 'undefined' ? activeTab === tabIndex : true"
+    x-transition:enter="transition-opacity duration-200"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-init="typeof activeTab !== 'undefined'">
+    <?php if ($title): ?>
+        <h2 class="w-full text-center text-2xl font-bold mb-3">
+            <?= $escaper->escapeHtml($title) ?>
+        </h2>
+    <?php endif; ?>
+    <?php if ($subTitle): ?>
+        <p class="w-full text-center text-base mb-3">
+            <?= $escaper->escapeHtml($subTitle) ?>
+        </p>
+    <?php endif; ?>
+    <?php foreach ($sections as $section): ?>
+        <div x-data="faqAccordion<?= $uniqueId ?>()" class="border-b first-of-type:border-t p-3">
+            <button class="flex justify-between w-full items-center" @click="isOpen = !isOpen">
+                <span class="text-lg font-bold">
+                    <?= $escaper->escapeHtml($section['section_title']) ?>
+                </span>
+                <?= $heroicons->chevronDownHtml("size-4 transition-transform duration-200", 16, 16, ['aria-hidden' => 'true', ":class" => "{ 'rotate-180': isOpen }"]) ?>
+            </button>
+            <div
+                class="grid transition-[grid-template-rows] grid-rows-[0fr] duration-200"
+                :class="{ 'grid-rows-[1fr]': isOpen, 'grid-rows-[0fr]': !isOpen }">
+                <div class="overflow-hidden">
+                    <div class="mt-4">
+                        <?= html_entity_decode($section['section_content']) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>

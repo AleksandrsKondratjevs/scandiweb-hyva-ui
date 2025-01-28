@@ -1,0 +1,42 @@
+<div class="pagebuilder-content-type faq-multiple-wrapper children-min-height"
+     attr="data.main.attributes"
+     event="{ mouseover: onMouseOver, mouseout: onMouseOut },  mouseoverBubble: false">
+     <render args="getOptions().template"></render>
+     <div class="faq-multiple-title"
+          data-bind="liveEdit: { field: 'title', placeholder: $t('Enter Title') }">
+     </div>
+     <div class="faq-multiple-sub-title"
+          data-bind="liveEdit: { field: 'sub_title', placeholder: $t('Enter Subtitle') }">
+     </div>
+     <div
+          class="faq-multiple-controls-wrapper focus-options">
+          <div class="faq-multiple-controls ui-sortable"
+               afterRender="afterNavigationRender"
+               each="$parent.getChildren()"
+               data-bind="sortableChildren: { handle: '.faq-multiple-tab-anchor', containment: 'parent', placeholder: 'faq-multiple-tab sortable-placeholder', tolerance: 'pointer', start: onSortStart.bind($parent.preview), stop: onSortStop.bind($parent.preview) }">
+               <span class="faq-multiple-tab"
+                     tabindex="0"
+                     event="focusin: $parent.setFocusedFaq.bind($parent, $index(), false), focusout: $parent.onFocusOut.bind($parent), click: $parent.setActiveFaqTab($index())"
+                     css="active: $parent.activeFaqTab() === $index(), focus: $parent.focusedFaq() === $index()">
+                    <a class="faq-multiple-tab-anchor"
+                       href="#"
+                       click="$parent.onControlClick.bind($parent, $index())"
+                       data-bind="hasFocusNoScroll: $parent.focusedFaq() === $index()">
+                         <span class="faq-multiple-tab-name"
+                               role="tooltip"
+                               text="preview.faqName">
+                         </span></a>
+                    <with args="preview">
+                         <render with="preview"
+                                 args="getOptions().template">
+                         </render>
+                    </with>
+               </span>
+          </div>
+     </div>
+     <div class="faq-container"
+          css="data.main.css"
+          ko-style="data.main.style">
+          <render args="childTemplate"></render>
+     </div>
+</div>
