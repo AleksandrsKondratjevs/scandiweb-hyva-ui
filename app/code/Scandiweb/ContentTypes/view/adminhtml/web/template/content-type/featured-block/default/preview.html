@@ -1,0 +1,38 @@
+<div attr="data.main.attributes"
+     ko-style="data.main.style"
+     class="pagebuilder-content-type featured-block"
+     css="data.main.css"
+     style="min-height: 400px;"
+     event="{ mouseover: onMouseOver, mouseout: onMouseOut }, mouseoverBubble: false">
+     <div class="featured-block-content"
+          data-bind="css: { 'featured-block-content-right': data.main.attributes().visual_content_position === 'right' }">
+          <div
+               data-bind="html: data.main.attributes().content_title || 'Title'">
+          </div>
+          <div
+               data-bind="html: data.main.attributes().content_description">
+          </div>
+          <div class="featured-block-cta-wrapper">
+               <div if="data.main.attributes().show_first_cta !== 'never'"
+                    type="button"
+                    data-bind="attr: { class: 'featured-block-cta ' + data.main.attributes().first_cta_type }">
+                    <span
+                          data-bind="text: data.main.attributes().first_cta_text"></span>
+               </div>
+               <div if="data.main.attributes().show_second_cta !== 'never'"
+                    type="button"
+                    data-bind="attr: { class: 'featured-block-cta ' + data.main.attributes().second_cta_type }">
+                    <span
+                          data-bind="text: data.main.attributes().second_cta_text"></span>
+               </div>
+          </div>
+     </div>
+     <div class="featured-block-visual"
+          data-bind="css: { 'featured-block-visual-right': data.main.attributes().visual_content_position === 'right' }">
+          <img
+               data-bind="attr: { src: data.main.attributes().src }" />
+
+     </div>
+     <render args="
+         getOptions().template" />
+</div>

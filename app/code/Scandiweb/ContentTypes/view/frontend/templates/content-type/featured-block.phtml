@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+// Content
+$title = $block->getContentTitle();
+$description = $block->getContentDescription();
+
+// First CTA configurations
+$isShowFirstCta = $block->getShowFirstCta();
+$firstCtaText = $block->getFirstCtaText();
+$firstCtaClasses = $block->getFirstCtaType();
+$firstCtaLink = $block->getFirstCtaLink();
+
+// Second CTA configurations
+$isShowSecondCta = $block->getShowSecondCta();
+$secondCtaText = $block->getSecondCtaText();
+$secondCtaClasses = $block->getSecondCtaType();
+$secondCtaLink = $block->getSecondCtaLink();
+
+// Visual
+$isVisualOnLeft = $block->getVisualContentPosition() === 'left';
+$image = $block->getImage();
+
+?>
+<div class="flex flex-col md:flex-row gap-4">
+    <?php if ($image): ?>
+        <div class="w-full <?= $isVisualOnLeft ? '' : 'order-2' ?>">
+            <img src="<?= $escaper->escapeUrl($image['url']) ?>" alt="<?= $escaper->escapeHtmlAttr($image['alt']) ?>">
+            </img>
+        </div>
+    <?php endif; ?>
+    <div class="flex flex-col gap-4 w-full h-full my-auto justify-center <?= $image ? '' : 'items-center' ?>">
+        <?php if ($title): ?>
+            <?= html_entity_decode($title) ?>
+        <?php endif; ?>
+        <?php if ($description): ?>
+            <?= html_entity_decode($description) ?>
+        <?php endif; ?>
+        <div class="flex gap-4">
+            <?php if ($isShowFirstCta === 'show'): ?>
+                <a href="<?= $escaper->escapeHtmlAttr($firstCtaLink) ?>" class="<?= $firstCtaClasses ?>"><?= $escaper->escapeHtml($firstCtaText) ?></a>
+            <?php endif; ?>
+            <?php if ($isShowSecondCta === 'show'): ?>
+                <a href="<?= $escaper->escapeHtmlAttr($secondCtaLink) ?>" class="<?= $secondCtaClasses ?>"><?= $escaper->escapeHtml($secondCtaText) ?></a>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
