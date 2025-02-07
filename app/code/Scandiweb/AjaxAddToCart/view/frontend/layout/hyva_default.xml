@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="before.body.end">
+            <block name="ajax.addtocart" template="Scandiweb_AjaxAddToCart::hyva/script/addtocart.phtml">
+                <block name="always.loader" template="Scandiweb_AjaxAddToCart::hyva/html/always-loader.phtml">
+                    <block name="block-loader" template="Hyva_Theme::ui/loading-block.phtml"/>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

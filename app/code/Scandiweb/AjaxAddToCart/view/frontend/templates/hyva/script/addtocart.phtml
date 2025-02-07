@@ -1,0 +1,121 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_AjaxAddToCart
+ * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+/**
+ * Updated version from Monsoon solution.
+ */
+
+declare(strict_types=1);
+
+use Monsoon\HyvaAjaxAddToCart\Block\AddToCart;
+use Magento\Framework\Escaper;
+
+/**
+ * @var AddToCart $block
+ * @var Escaper $escaper
+ */
+
+?>
+<script>
+    window.setAjaxCart = (recursive = true) => {
+        const forms = document.querySelectorAll('.product_addtocart_form, #product_addtocart_form');
+
+        forms.forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = new URLSearchParams(new FormData(form));
+                const isButtonInsideForm = !!form.querySelector('button');
+                const button = isButtonInsideForm ?
+                    form.querySelector('button') :
+                    document.getElementById('product-addtocart-button');
+                const loader = document.createElement('div');
+
+                loader.className = 'absolute inset-0 flex justify-center items-center loader';
+                loader.innerHTML = `<?= $block->getChildHtml('always.loader') ?>`;
+
+                if (isButtonInsideForm) {
+                    form.prepend(loader);
+                    form.classList.add('relative');
+                } else {
+                    button.prepend(loader);
+                    button.classList.add('relative')
+                }
+
+                button.disabled = true;
+
+                try {
+                    const response = await fetch(e.currentTarget.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        return form.submit();
+                    }
+
+                    if (response.redirected) {
+                        return window.location.href = response.url;
+                    }
+
+                    const data = await response.json();
+
+                    if (data.backUrl) {
+                        return window.location.href = data.backUrl;
+                    }
+
+                    if (recursive) {
+                        window.dispatchEvent(new CustomEvent('product-addtocart-success'));
+                    }
+
+                    return window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
+                } catch (err) {
+                    console.warn(err);
+                    window.dispatchEvent(new CustomEvent('product-addtocart-error'));
+
+                    setMessage({
+                        text: '<?= $escaper->escapeJs(__('There was a problem adding your item to the cart.')) ?>',
+                        type: 'error'
+                    });
+                } finally {
+                    try {
+                        var messages = hyva.getCookie('mage-messages');
+                        messages = messages ? JSON.parse(decodeURIComponent(messages).replace(/\+/g, ' ')) : [];
+                        document.cookie = 'mage-messages=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+
+                    } catch (error) {
+                        console.warn('Error parsing Cookie Messages:', error);
+                        return;
+                    }
+
+                    setTimeout(() => {
+                        loader.remove();
+                        button.disabled = false;
+                    }, 0);
+                }
+            });
+        });
+    }
+
+    /**
+     * Set Message
+     */
+    function setMessage(message) {
+        typeof window.dispatchMessages !== "undefined" &&
+            window.dispatchMessages([message], 5000);
+    }
+
+    /** Init on pageload */
+    window.setAjaxCart();
+</script>
