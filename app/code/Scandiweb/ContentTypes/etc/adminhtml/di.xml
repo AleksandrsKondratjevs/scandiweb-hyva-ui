@@ -71,4 +71,19 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="PlaceholderType" type="Magento\PageBuilder\Model\Source\VisualSelect">
+        <arguments>
+            <argument name="optionsSize" xsi:type="string">small</argument>
+            <argument name="optionsData" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="value" xsi:type="string">uploader</item>
+                    <item name="title" xsi:type="string" translate="true">Uploader</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="value" xsi:type="string">url</item>
+                    <item name="title" xsi:type="string" translate="true">URL</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

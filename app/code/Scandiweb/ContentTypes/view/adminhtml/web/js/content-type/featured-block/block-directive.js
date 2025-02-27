@@ -27,7 +27,12 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
             second_cta_link,
             second_cta_type,
             visual_content_position,
+            visual_type,
             visual_content_img,
+            visual_content_vid,
+            placeholder_type,
+            visual_content_video_placeholder,
+            visual_content_video_placeholder_url,
         } = data || {};
 
         var attributes = {
@@ -42,7 +47,12 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
             second_cta_link,
             second_cta_type,
             visual_content_position,
+            visual_type,
             visual_content_img: JSON.stringify(visual_content_img),
+            visual_content_vid,
+            placeholder_type,
+            visual_content_video_placeholder: JSON.stringify(visual_content_video_placeholder),
+            visual_content_video_placeholder_url
         };
 
         return attributes;
