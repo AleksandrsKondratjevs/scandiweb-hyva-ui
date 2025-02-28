@@ -255,6 +255,15 @@
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                     </settings>
                 </field>
+                <field name="tab_image" component="Magento_Ui/js/form/element/image-uploader" template="Scandiweb_ContentTypes/form/element/uploader/image" formElement="imageUploader">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Logo/Image</label>
+                        <visible>true</visible>
+                        <dataScope>tab_image</dataScope>
+                        <elementTmpl>ui/dynamic-rows/cells/thumbnail</elementTmpl>
+                    </settings>
+                </field>
                 <button name="actions" component="Magento_PageBuilder/js/form/components/action-button" template="Magento_PageBuilder/form/components/dynamic-rows/actions">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">

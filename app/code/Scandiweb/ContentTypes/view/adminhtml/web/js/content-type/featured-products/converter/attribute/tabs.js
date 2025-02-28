@@ -52,7 +52,12 @@ define([
                             tab["condition_option"] + "_source"
                         );
                     }
+
+                    if (!tab.tab_image) {
+                        tab.tab_image = [];
+                    }
                 });
+
                 return JSON.stringify(content);
             }
 

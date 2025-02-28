@@ -40,6 +40,11 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
             tabResult.category_id = tab.category_ids;
             tabResult.sku = tab.sku;
 
+            if(tab.tab_image) {
+                tabResult.tab_image_url = tab.tab_image[0].url;
+                tabResult.tab_image_name = tab.tab_image[0].name;
+            }
+
             if (tabResult.condition_option === "condition") {
                 tabResult.conditions = this.encodeWysiwygCharacters(
                     tab.conditions_encoded || ""

@@ -211,6 +211,24 @@
                 </select>
             </formElements>
         </field>
+        <field name="tab_image" formElement="imageUploader" sortOrder="65">
+            <settings>
+                <label translate="true">Tab Image/Logo</label>
+                <componentType>imageUploader</componentType>
+            </settings>
+            <formElements>
+                <imageUploader>
+                    <settings>
+                        <allowedExtensions>jpg jpeg gif png svg</allowedExtensions>
+                        <maxFileSize>4194304</maxFileSize>
+                        <uploaderConfig>
+                            <param xsi:type="string" name="url">pagebuilder/contenttype/image_upload</param>
+                        </uploaderConfig>
+                        <previewTmpl>Magento_PageBuilder/form/element/uploader/preview</previewTmpl>
+                    </settings>
+                </imageUploader>
+            </formElements>
+        </field>
         <container name="product_count_group" component="Magento_Ui/js/form/components/group" sortOrder="70">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
