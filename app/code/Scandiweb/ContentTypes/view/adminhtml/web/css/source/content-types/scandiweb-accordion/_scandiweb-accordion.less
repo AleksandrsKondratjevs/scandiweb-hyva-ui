@@ -1,0 +1,59 @@
+[data-content-type='scandiweb_accordion'] {
+    border-bottom: 1px solid fade(@color-gray60, 40%);
+
+    .scandiweb {
+        &-accordion {
+            &-title {
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 24px;
+                padding: 21px 30px 19px 40px;
+                position: relative;
+                width: 100%;
+
+                &::after {
+                    border-bottom: 0;
+                    border-left: 3px solid transparent;
+                    border-right: 3px solid transparent;
+                    border-top: 3px solid @color-black;
+                    left: 22px;
+                    top: 29px;
+                }
+            }
+
+      &-content {
+          padding: 0 15px 19px 40px;
+
+          .placeholder-text {
+              padding-left: 40px;
+          }
+
+          .pagebuilder-button {
+              &-primary {
+                  background: var(--primary-base-button-color);
+                  border: 2px solid var(--primary-base-button-color);
+                  border-radius: 2px;
+                  color: #ffffff;
+                  text-transform: uppercase;
+                  margin-top: 12px;
+              }
+
+              &-secondary {
+                  border: 2px solid var(--primary-base-button-color);
+                  border-radius: 2px;
+                  color: var(--primary-base-button-color);
+                  text-transform: uppercase;
+                  margin-top: 12px;
+              }
+
+              &-link {
+                  color: var(--primary-base-button-color);
+                  text-transform: uppercase;
+                  margin-top: 12px;
+                  padding-left: 0;
+              }
+          }
+      }
+    }
+  }
+}
