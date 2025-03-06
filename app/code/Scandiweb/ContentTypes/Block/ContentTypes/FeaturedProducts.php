@@ -54,7 +54,6 @@ class FeaturedProducts extends Template implements BlockInterface
     public function getSections(): array
     {
         $data = [];
-
         $tabsData = $this->getData(('tabs'));
 
         if (!$tabsData) {
@@ -74,9 +73,10 @@ class FeaturedProducts extends Template implements BlockInterface
                 'category_id' => isset($section['category_id']) ? $section['category_id'] : null,
                 'sku' =>  isset($section['sku']) ? $section['sku'] : null,
                 'conditions' =>  isset($section['conditions']) ? $section['conditions'] : null,
+                'tab_image_url' => isset($section['tab_image_url']) ? $section['tab_image_url'] : null,
+                'tab_image_name' => isset($section['tab_image_name']) ? $section['tab_image_name'] : null,
             ];
         }
-
 
         return $data;
     }

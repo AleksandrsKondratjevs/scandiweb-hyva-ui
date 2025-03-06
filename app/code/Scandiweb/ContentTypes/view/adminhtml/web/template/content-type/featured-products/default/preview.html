@@ -15,10 +15,15 @@
               args="data.main.attributes()['data-tabs'] && JSON.parse(data.main.attributes()['data-tabs'])?.length">
                <div class="featured-products-category-wrapper"
                     data-bind="attr: { cards: data.main.attributes()['data-tabs'] }"
-                    data-element="products_sections">
+                    data-element="products_sections"
+                    style="text-align: center;">
                     <!-- ko foreach: JSON.parse(data.main.attributes()['data-tabs']) -->
                     <div class="featured-products-category-button"
-                         data-bind="text: title, css: { 'featured-products-category-button-active': $index() === 0 }">
+                         data-bind="css: { 'featured-products-category-button-active': $index() === 0 }">
+                         <if args="tab_image.length">
+                              <img style="max-height: 48px;" data-bind="attr: { src: tab_image[0].url }" />
+                         </if>
+                         <div data-bind="text: title"></div>
                     </div>
                     <!-- /ko -->
                </div>
