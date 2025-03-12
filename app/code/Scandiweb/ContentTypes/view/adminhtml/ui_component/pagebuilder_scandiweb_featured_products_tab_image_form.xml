@@ -3,15 +3,15 @@
 /**
  * @category  Scandiweb
  * @package   Scandiweb_ContentTypes
- * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
- * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @author    Baron Gobi <info@scandiweb.com>
+ * @copyright Copyright (c) 2025 Scandiweb, Inc (https://scandiweb.com)
  * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
  -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">pagebuilder_scandiweb_featured_products_tab_form.pagebuilder_scandiweb_featured_products_tab_form_data_source</item>
+            <item name="provider" xsi:type="string">pagebuilder_scandiweb_featured_products_tab_image_form.pagebuilder_scandiweb_featured_products_tab_image_form_data_source</item>
         </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="label" xsi:type="string" translate="true">Tab</item>
@@ -19,21 +19,21 @@
     <settings>
         <dataScope>data</dataScope>
         <deps>
-            <dep>pagebuilder_scandiweb_featured_products_tab_form.pagebuilder_scandiweb_featured_products_tab_form_data_source</dep>
+            <dep>pagebuilder_scandiweb_featured_products_tab_image_form.pagebuilder_scandiweb_featured_products_tab_image_form_data_source</dep>
         </deps>
-        <namespace>pagebuilder_scandiweb_featured_products_tab_form</namespace>
+        <namespace>pagebuilder_scandiweb_featured_products_tab_image_form</namespace>
         <buttons>
             <button name="save" class="Magento\PageBuilder\Block\Adminhtml\ContentType\Edit\SaveButton"/>
         </buttons>
         <selectorPrefix>.block-featured-products-form</selectorPrefix>
     </settings>
-    <dataSource name="pagebuilder_scandiweb_featured_products_tab_form_data_source">
+    <dataSource name="pagebuilder_scandiweb_featured_products_tab_image_form_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Scandiweb_ContentTypes/js/form/featured-products-provider</item>
             </item>
         </argument>
-        <dataProvider name="pagebuilder_scandiweb_featured_products_tab_form_data_source" class="Magento\PageBuilder\Model\ContentType\DataProvider">
+        <dataProvider name="pagebuilder_scandiweb_featured_products_tab_image_form_data_source" class="Magento\PageBuilder\Model\ContentType\DataProvider">
             <settings>
                 <requestFieldName/>
                 <primaryFieldName/>
@@ -181,7 +181,7 @@
             </settings>
             <block name="conditions_form" class="Magento\PageBuilder\Block\Adminhtml\Form\Element\ProductConditions">
                 <arguments>
-                    <argument name="formNamespace" xsi:type="string">pagebuilder_scandiweb_featured_products_tab_form</argument>
+                    <argument name="formNamespace" xsi:type="string">pagebuilder_scandiweb_featured_products_tab_image_form</argument>
                     <argument name="attribute" xsi:type="string">condition_source</argument>
                     <argument name="label" xsi:type="string" translate="true">Condition</argument>
                 </arguments>
@@ -209,6 +209,24 @@
                         <options class="Magento\PageBuilder\Model\Catalog\Sorting\Options"/>
                     </settings>
                 </select>
+            </formElements>
+        </field>
+        <field name="tab_image" formElement="imageUploader" sortOrder="65">
+            <settings>
+                <label translate="true">Tab Image/Logo</label>
+                <componentType>imageUploader</componentType>
+            </settings>
+            <formElements>
+                <imageUploader>
+                    <settings>
+                        <allowedExtensions>jpg jpeg gif png svg</allowedExtensions>
+                        <maxFileSize>4194304</maxFileSize>
+                        <uploaderConfig>
+                            <param xsi:type="string" name="url">pagebuilder/contenttype/image_upload</param>
+                        </uploaderConfig>
+                        <previewTmpl>Magento_PageBuilder/form/element/uploader/preview</previewTmpl>
+                    </settings>
+                </imageUploader>
             </formElements>
         </field>
         <container name="product_count_group" component="Magento_Ui/js/form/components/group" sortOrder="70">

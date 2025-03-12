@@ -24,6 +24,7 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
             slider_show_pagination,
             slider_pagination_type_progressbar,
             slider_show_arrows,
+            appearance
         } = data || {};
 
         const sortedTabs = tabs.sort(
@@ -60,6 +61,7 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
             slider_pagination_type_progressbar,
             slider_show_arrows,
             tabs: JSON.stringify(formattedTabs),
+            appearance
         };
 
         return attributes;
