@@ -23,6 +23,7 @@ $uniqueId = '_' . uniqid('');
 $title = $block->getTitle();
 $subTitle = $block->getSubTitle();
 $isShowAllButtonEnabled = $block->getIsShowAllEnabled();
+$appearance = $block->getAppearance();
 
 // Slider configurations
 $isSliderInfinitive = $block->getSliderInfinitive();
@@ -199,10 +200,15 @@ $isSliderShowArrows = $block->getSliderShowArrows();
         </p>
     <?php endif; ?>
     <div class="swiper" x-ref="categoriesWrapper">
-        <div class="swiper-wrapper flex overflow-hidden !py-1">
+        <div class="swiper-wrapper flex overflow-hidden !py-1 items-center">
             <?php foreach ($sections as $index => $section): ?>
                 <?php
                 $title = $section['title'];
+
+                if ($appearance === 'image') {
+                    $imgUrl = $section['tab_image_url'];
+                    $imgName = $section['tab_image_name'];
+                }
                 ?>
                 <button
                     class="btn <?= $index === 0 ? 'btn-primary' : 'btn-secondary' ?> swiper-slide !max-w-max min-w-max mr-4"
@@ -211,7 +217,10 @@ $isSliderShowArrows = $block->getSliderShowArrows();
                         'btn-secondary': <?= $index ?> !== selectedTabIndex,
                     }"
                     @click="handleCategorySelect(<?= $escaper->escapeHtmlAttr(json_encode($section)) ?>, <?= $index ?>)">
-                    <?= $escaper->escapeHtml($title) ?>
+                        <?php if ($appearance === 'image'): ?>
+                            <img class="max-h-12 mx-auto" src="<?= $escaper->escapeUrl($imgUrl) ?>" alt="<?= $escaper->escapeHtmlAttr($imgName) ?>">
+                        <?php endif; ?>
+                        <?= $escaper->escapeHtml($title) ?>
                 </button>
             <?php endforeach; ?>
         </div>

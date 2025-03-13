@@ -24,6 +24,7 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
             slider_show_pagination,
             slider_pagination_type_progressbar,
             slider_show_arrows,
+            appearance
         } = data || {};
 
         const sortedTabs = tabs.sort(
@@ -39,12 +40,15 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
             tabResult.title = tab.title;
             tabResult.category_id = tab.category_ids;
             tabResult.sku = tab.sku;
+            tabResult.tab_image_url = tab.tab_image.length !== 0 ? tab.tab_image[0].url : "";
+            tabResult.tab_image_name = tab.tab_image.length !== 0 ? tab.tab_image[0].name : "";
 
             if (tabResult.condition_option === "condition") {
                 tabResult.conditions = this.encodeWysiwygCharacters(
                     tab.conditions_encoded || ""
                 );
             }
+
             return tabResult;
         });
 
@@ -57,6 +61,7 @@ define(["Scandiweb_ContentTypes/js/content-type/block-directive"], function (
             slider_pagination_type_progressbar,
             slider_show_arrows,
             tabs: JSON.stringify(formattedTabs),
+            appearance
         };
 
         return attributes;

@@ -3,8 +3,8 @@
 /**
  * @category  Scandiweb
  * @package   Scandiweb_ContentTypes
- * @author    Aleksandrs Kondratjevs <info@scandiweb.com>
- * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @author    Baron Gobi <info@scandiweb.com>
+ * @copyright Copyright (c) 2025 Scandiweb, Inc (https://scandiweb.com)
  * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
@@ -19,7 +19,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Catalog\Helper\Category as CategoryHelper;
 
-class FeaturedProducts extends Template implements BlockInterface
+class FeaturedProductsImage extends Template implements BlockInterface
 {
     protected $_template = 'Scandiweb_ContentTypes::content-type/featured-products.phtml';
 
@@ -73,6 +73,8 @@ class FeaturedProducts extends Template implements BlockInterface
                 'category_id' => isset($section['category_id']) ? $section['category_id'] : null,
                 'sku' =>  isset($section['sku']) ? $section['sku'] : null,
                 'conditions' =>  isset($section['conditions']) ? $section['conditions'] : null,
+                'tab_image_url' => isset($section['tab_image_url']) ? $section['tab_image_url'] : null,
+                'tab_image_name' => isset($section['tab_image_name']) ? $section['tab_image_name'] : null,
             ];
         }
 
