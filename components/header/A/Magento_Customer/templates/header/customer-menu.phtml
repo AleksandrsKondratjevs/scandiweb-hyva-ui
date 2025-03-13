@@ -1,0 +1,54 @@
+<?php
+/**
+ * @category  Scandiweb
+ * @copyright Copyright (c) 2024 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Customer\Block\Account\Customer;
+use Magento\Framework\Escaper;
+
+/** @var Customer $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+
+<div
+    class="relative inline-block"
+    x-data="{ open: false }"
+    @keyup.escape="open = false"
+    @click.outside="open = false"
+>
+    <button
+        type="button"
+        id="customer-menu"
+        class="block rounded"
+        @click="open = !open"
+        :aria-expanded="open ? 'true' : 'false'"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
+        aria-haspopup="true"
+    >
+        <?= $heroicons->userCircleHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+    </button>
+    <nav
+        class="z-30 absolute -right-4 w-48 sm:w-56 mt-2 py-2 px-1 overflow-auto
+            rounded shadow-lg lg:mt-3 bg-container-lighter"
+        x-cloak
+        x-show="open"
+        x-transition
+        aria-labelledby="customer-menu"
+    >
+        <?php if ($block->customerLoggedIn()): ?>
+            <?= $block->getChildHtml('header.customer.logged.in.links') ?>
+        <?php else: ?>
+            <?= $block->getChildHtml('header.customer.logged.out.links') ?>
+        <?php endif; ?>
+    </nav>
+</div>

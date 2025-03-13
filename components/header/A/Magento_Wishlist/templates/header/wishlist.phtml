@@ -1,0 +1,51 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$label = __('My Wish List');
+?>
+
+<a
+    href="<?= $escaper->escapeUrl($block->getUrl('wishlist')) ?>"
+    class="relative inline-block"
+    x-data="{ itemCount: 0 }"
+    @private-content-loaded.window="itemCount = parseInt($event.detail.data.wishlist.counter)"
+    aria-label="<?= $escaper->escapeHtmlAttr($label); ?>"
+    :aria-label="itemCount > 0
+        ? `<?= $escaper->escapeHtmlAttr($label); ?>,
+            ${itemCount > 1
+                ? hyva.str('<?= $escaper->escapeJs(__('%1 items')) ?>', itemCount)
+                : hyva.str('<?= $escaper->escapeJs(__('%1 item')) ?>', itemCount)
+            }`
+        : '<?= $escaper->escapeHtmlAttr($label); ?>'
+    "
+>
+    <?= $heroicons->heartHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
+    <template x-if="itemCount">
+        <span
+            x-text="itemCount"
+            class="absolute top-0 right-0 px-0.5 min-h-4 min-w-4 -mt-3.5 -mr-1.5 flex justify-center items-center text-xs font-bold
+                    leading-none text-center text-white uppercase transform
+                    translate-y-1/2 rounded-full bg-primary"
+            aria-hidden="true"
+        ></span>
+    </template>
+</a>
