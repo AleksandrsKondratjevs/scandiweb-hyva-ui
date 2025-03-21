@@ -33,7 +33,7 @@ $videoUrl = $block->getVisualContentVid();
 if ($visualType === 'video' && $videoUrl) {
     $placeHolderType = $block->getPlaceholderType();
     $imagePlaceholder = $placeHolderType === 'uploader' ?
-        $image['url'] : $block->getVisualContentVideoPlaceholderUrl();
+        ($image['url'] ?? '') : $block->getVisualContentVideoPlaceholderUrl();
 }
 
 //Jaralax URLs
@@ -46,11 +46,11 @@ $jarallaxCssUrl = $block->getViewFileUrl('Scandiweb_ContentTypes::css/jarallax.m
     <?php if (($visualType === 'image' && $image) || ($visualType === 'video' && $videoUrl)): ?>
         <div class="w-full <?= ($visualType === 'video' && $videoUrl) ? 'h-96' : '' ?> <?= $isVisualOnLeft ? '' : 'order-2' ?>">
             <?php if ($visualType === 'image'): ?>
-                <img src="<?= $escaper->escapeUrl($image['url']) ?>" alt="<?= $escaper->escapeHtmlAttr($image['alt']) ?>">
+                <img src="<?= $escaper->escapeUrl(($image['url'] ?? '')) ?>" alt="<?= $escaper->escapeHtmlAttr(($image['alt'] ?? '')) ?>">
                 </img>
             <?php else: ?>
                 <div class="jarallax overflow-hidden h-full" data-video-src="<?= $escaper->escapeUrl($videoUrl) ?>">
-                    <img class="jarallax-placeholder" src="<?= $escaper->escapeUrl($imagePlaceholder) ?>" alt="<?= $escaper->escapeHtmlAttr($image['alt']) ?>">
+                    <img class="jarallax-placeholder" src="<?= $escaper->escapeUrl($imagePlaceholder) ?>" alt="<?= $escaper->escapeHtmlAttr(($image['alt'] ?? '')) ?>">
                     </img>
                 </div>
             <?php endif; ?>
