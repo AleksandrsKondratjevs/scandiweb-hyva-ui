@@ -50,9 +50,9 @@ class AccordionBlock extends Template implements BlockInterface
     {
         $html = $this->filterProvider->getPageFilter()->filter($this->getContent());
 
-        $html = str_replace("&amp;", "", $html);
+        $html = str_replace("&amp;", "&", $html);
         $html = str_replace("quot;", "'", $html);
-        $html = str_replace("quote;", "\"", $html);
+        $html = str_replace("&quote;", "\"", $html);
 
         return $html;
     }

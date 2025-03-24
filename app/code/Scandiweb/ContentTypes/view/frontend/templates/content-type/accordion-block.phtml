@@ -20,7 +20,7 @@ $title = $block->getTitle();
 $isDesktopDisabled = (int)$block->getDesktopDisabled();
 $content = $block->getCmsFilterContent();
 ?>
-<div x-data="dropdown(<?= $isDesktopDisabled ?>)" class="w-full">
+<div x-data="dropdown(<?= $isDesktopDisabled ?>, <?= $isActive ?>)" class="w-full">
     <div class="accordion-header p-4 cursor-pointer flex justify-between items-center" @click="toggle(<?= $isDesktopDisabled ?>)">
         <h2 class="text-lg font-semibold"><?= $escaper->escapeHtml($title) ?></h2>
         <span x-show="!isOpen">
@@ -36,8 +36,8 @@ $content = $block->getCmsFilterContent();
 </div>
 <script>
     document.addEventListener('alpine:init', () => {
-        Alpine.data('dropdown', (isDesktopDisabled) => ({
-            isOpen: <?= $isActive ?>,
+        Alpine.data('dropdown', (isDesktopDisabled, isActive) => ({
+            isOpen: isActive,
             init() {
                 if (isDesktopDisabled && window.innerWidth > 1024) {
                     this.isOpen = true; // forcing the accordion to be opened on desktop if it's disabled
