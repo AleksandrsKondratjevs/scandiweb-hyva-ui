@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Baron Gobi <info@scandiweb.com>
+ * @copyright Copyright (c) 2025 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+$isActive = $block->getActive();
+$title = $block->getTitle();
+$isDesktopDisabled = (int)$block->getDesktopDisabled();
+$content = $block->getCmsFilterContent();
+?>
+<div x-data="dropdown(<?= $isDesktopDisabled ?>, <?= $isActive ?>)" class="w-full">
+    <div class="accordion-header p-4 cursor-pointer flex justify-between items-center" @click="toggle(<?= $isDesktopDisabled ?>)">
+        <h2 class="text-lg font-semibold"><?= $escaper->escapeHtml($title) ?></h2>
+        <span x-show="!isOpen">
+            <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5 -mr-1 ml-2 lg:hidden", 25, 25) ?>
+        </span>
+        <span x-show="isOpen">
+            <?= $heroiconsSolid->chevronUpHtml("flex self-center h-5 w-5 -mr-1 ml-2 lg:hidden", 25, 25) ?>
+        </span>
+    </div>
+    <div class="accordion-content p-4" x-show="isOpen" x-transition>
+        <p><?= html_entity_decode($content) ?></p>
+    </div>
+</div>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('dropdown', (isDesktopDisabled, isActive) => ({
+            isOpen: isActive,
+            init() {
+                if (isDesktopDisabled && window.innerWidth > 1024) {
+                    this.isOpen = true; // forcing the accordion to be opened on desktop if it's disabled
+                }
+            },
+            toggle() {
+                if (isDesktopDisabled && window.innerWidth > 1024) {
+                    this.isOpen = true;
+                    return;
+                }
+
+                this.isOpen = ! this.isOpen
+            },
+        }))
+    })
+</script>

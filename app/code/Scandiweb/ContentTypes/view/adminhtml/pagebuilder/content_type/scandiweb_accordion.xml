@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Scandiweb
+ * @package   Scandiweb_ContentTypes
+ * @author    Baron Gobi <info@scandiweb.com>
+ * @copyright Copyright (c) 2025 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_PageBuilder:etc/content_type.xsd">
+    <type name="scandiweb_accordion"
+        label="Accordion"
+        menu_section="scandiweb_components"
+        component="Magento_PageBuilder/js/content-type"
+        preview_component="Scandiweb_ContentTypes/js/content-type/scandiweb-accordion/preview"
+        master_component="Magento_PageBuilder/js/content-type/master"
+        form="pagebuilder_scandiweb_accordion_form"
+        icon="icon-pagebuilder-accordion"
+        sortOrder="40"
+        translate="label">
+        <parents default_policy="deny">
+            <parent name="row" policy="allow" />
+            <parent name="column" policy="allow" />
+        </parents>
+        <children default_policy="deny" />
+        <appearances>
+            <appearance name="default" default="true"
+                preview_template="Scandiweb_ContentTypes/content-type/scandiweb-accordion/default/preview"
+                master_template="Scandiweb_ContentTypes/content-type/scandiweb-accordion/default/master"
+                reader="Magento_PageBuilder/js/master-format/read/configurable">
+                <elements>
+                    <element name="main">
+                        <style name="text_align" source="text_align" />
+                        <style name="border" source="border_style"
+                            converter="Magento_PageBuilder/js/converter/style/border-style" />
+                        <style name="border_color" source="border_color" />
+                        <style name="border_width" source="border_width"
+                            converter="Magento_PageBuilder/js/converter/style/border-width" />
+                        <style name="border_radius" source="border_radius"
+                            converter="Magento_PageBuilder/js/converter/style/remove-px" />
+                        <style name="display" source="display"
+                            converter="Magento_PageBuilder/js/converter/style/display"
+                            preview_converter="Magento_PageBuilder/js/converter/style/preview/display" />
+                        <style name="margins" storage_key="margins_and_padding"
+                            reader="Magento_PageBuilder/js/property/margins"
+                            converter="Magento_PageBuilder/js/converter/style/margins" />
+                        <style name="padding" storage_key="margins_and_padding"
+                            reader="Magento_PageBuilder/js/property/paddings"
+                            converter="Magento_PageBuilder/js/converter/style/paddings" />
+                        <attribute name="name" source="data-content-type" />
+                        <attribute name="title" source="title" />
+                        <attribute name="content" source="content" />
+                        <attribute name="appearance" source="data-appearance" />
+                        <attribute name="active" source="data-accordion-active" />
+                        <attribute name="anchor" source="data-accordion-anchor" />
+                        <attribute name="show_button" source="data-show-button"/>
+                        <attribute name="desktop_disabled" source="data-accordion-desktop-disabled" />
+                        <css name="css_classes" />
+                    </element>
+                    <element name="title">
+                        <html name="title" />
+                    </element>
+                    <element name="content">
+                        <html name="content" preview_converter="Magento_PageBuilder/js/converter/html/directive" />
+                    </element>
+                    <element name="block_directive">
+                        <html name="block_directive" converter="Magento_PageBuilder/js/converter/html/tag-escaper" />
+                    </element>
+                </elements>
+                <converters>
+                    <converter component="Scandiweb_ContentTypes/js/content-type/scandiweb-accordion/block-directive" name="block_directive">
+                        <config>
+                            <item name="html_variable" value="block_directive"/>
+                            <item name="block_class" value="Scandiweb\ContentTypes\Block\ContentTypes\AccordionBlock"/>
+                        </config>
+                    </converter>
+                </converters>
+            </appearance>
+        </appearances>
+        <additional_data>
+            <item name="wysiwygConfig" xsi:type="array">
+                <item name="wysiwygConfigData" xsi:type="object">
+                    Magento\PageBuilder\Model\Config\ContentType\AdditionalData\Provider\Wysiwyg\Config
+                </item>
+            </item>
+        </additional_data>
+    </type>
+</config>
