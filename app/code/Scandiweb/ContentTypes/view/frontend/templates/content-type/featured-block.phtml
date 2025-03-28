@@ -26,17 +26,39 @@ $secondCtaLink = $block->getSecondCtaLink();
 
 // Visual
 $isVisualOnLeft = $block->getVisualContentPosition() === 'left';
+$visualType = $block->getVisualType();
 $image = $block->getImage();
+$videoUrl = $block->getVisualContentVid();
+
+if ($visualType === 'video' && $videoUrl) {
+    $placeHolderType = $block->getPlaceholderType();
+    $imagePlaceholder = $placeHolderType === 'uploader' ?
+        ($image['url'] ?? '') : $block->getVisualContentVideoPlaceholderUrl();
+}
+
+//Jaralax URLs
+$jarallaxUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax.min.js');
+$jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-video.min.js');
+$jarallaxCssUrl = $block->getViewFileUrl('Scandiweb_ContentTypes::css/jarallax.min.css');
 
 ?>
 <div class="flex flex-col md:flex-row gap-4">
-    <?php if ($image): ?>
-        <div class="w-full <?= $isVisualOnLeft ? '' : 'order-2' ?>">
-            <img src="<?= $escaper->escapeUrl($image['url']) ?>" alt="<?= $escaper->escapeHtmlAttr($image['alt']) ?>">
-            </img>
+    <?php if (($visualType === 'image' && $image) || ($visualType === 'video' && $videoUrl)): ?>
+        <div class="w-full <?= ($visualType === 'video' && $videoUrl) ? 'h-96' : '' ?> <?= $isVisualOnLeft ? '' : 'order-2' ?>">
+            <?php if ($visualType === 'image'): ?>
+                <img src="<?= $escaper->escapeUrl(($image['url'] ?? '')) ?>" alt="<?= $escaper->escapeHtmlAttr(($image['alt'] ?? '')) ?>">
+                </img>
+            <?php else: ?>
+                <div class="jarallax overflow-hidden h-full" data-video-src="<?= $escaper->escapeUrl($videoUrl) ?>">
+                    <img class="jarallax-placeholder" src="<?= $escaper->escapeUrl($imagePlaceholder) ?>" alt="<?= $escaper->escapeHtmlAttr(($image['alt'] ?? '')) ?>">
+                    </img>
+                </div>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
-    <div class="flex flex-col gap-4 w-full h-full my-auto justify-center <?= $image ? '' : 'items-center' ?>">
+    <div class="flex flex-col gap-4 w-full h-full my-auto justify-center
+                <?= (($visualType === 'image' && $image) || ($visualType === 'video' && $videoUrl)) ? '' : 'items-center' ?>"
+    >
         <?php if ($title): ?>
             <?= html_entity_decode($title) ?>
         <?php endif; ?>
@@ -53,3 +75,41 @@ $image = $block->getImage();
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', function() {
+        const jarallaxCssUrl = '<?= $escaper->escapeJs($escaper->escapeUrl($jarallaxCssUrl)) ?>';
+        const jarallaxUrl = '<?= $escaper->escapeJs($escaper->escapeUrl($jarallaxUrl)) ?>';
+        const jarallaxVideoUrl = '<?= $escaper->escapeJs($escaper->escapeUrl($jarallaxVideoUrl)) ?>';
+
+        function loadCss(url) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = url;
+            document.head.appendChild(link);
+        }
+
+        function loadScript(url, callback) {
+            let script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = url;
+            script.onload = callback;
+            document.body.appendChild(script);
+        }
+
+        loadScript(jarallaxUrl, () => {
+            loadScript(jarallaxVideoUrl, () =>{
+                let elements = document.querySelectorAll(".jarallax");
+
+                elements.forEach(element => {
+                    jarallax(element);
+
+                    let placeholders = document.querySelectorAll('.jarallax-placeholder');
+
+                    placeholders.forEach(placeholder => {
+                        placeholder.style.display = 'none';
+                    });
+                });
+            });
+        });
+    });
+</script>

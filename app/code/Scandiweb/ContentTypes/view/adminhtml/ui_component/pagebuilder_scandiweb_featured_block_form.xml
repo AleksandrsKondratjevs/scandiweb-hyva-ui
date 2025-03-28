@@ -369,10 +369,34 @@
                 </select>
             </formElements>
         </field>
-        <field name="visual_content_img" formElement="imageUploader" sortOrder="20">
+        <field name="visual_type" sortOrder="20" formElement="select" component="Magento_PageBuilder/js/form/element/condition-options">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">image</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Visual Type</label>
+                <elementTmpl>Magento_PageBuilder/form/element/visual-select</elementTmpl>
+                <dataScope>visual_type</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="BackgroundTypeSource"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="visual_content_img" formElement="imageUploader" sortOrder="30">
             <settings>
                 <label translate="true">Image</label>
                 <componentType>imageUploader</componentType>
+                <visible>false</visible>
+                <imports>
+                    <link name="visible">${$.parentName}.visual_type:imageVisible</link>
+                </imports>
             </settings>
             <formElements>
                 <imageUploader>
@@ -386,6 +410,76 @@
                     </settings>
                 </imageUploader>
             </formElements>
+        </field>
+        <field name="visual_content_vid" sortOrder="40" formElement="input">
+            <settings>
+                <label translate="true">Video URL</label>
+                <dataType>text</dataType>
+                <dataScope>visual_content_vid</dataScope>
+                <visible>false</visible>
+                <imports>
+                    <link name="visible">${$.parentName}.visual_type:videoVisible</link>
+                </imports>
+            </settings>
+        </field>
+        <field name="placeholder_type" sortOrder="45" formElement="select" component="Magento_PageBuilder/js/form/element/condition-options">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">uploader</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Placeholder Type</label>
+                <elementTmpl>Magento_PageBuilder/form/element/visual-select</elementTmpl>
+                <dataScope>placeholder_type</dataScope>
+                <visible>false</visible>
+                <imports>
+                    <link name="visible">${$.parentName}.visual_type:videoVisible</link>
+                </imports>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="PlaceholderType"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="visual_content_video_placeholder" formElement="imageUploader" sortOrder="50">
+            <settings>
+                <label translate="true">Placeholder Image</label>
+                <componentType>imageUploader</componentType>
+                <visible>false</visible>
+                <imports>
+                    <link name="visible">${$.parentName}.visual_type:videoVisible</link>
+                </imports>
+                <notice translate="true">Will only be shown if placeholder type is uploader</notice>
+            </settings>
+            <formElements>
+                <imageUploader>
+                    <settings>
+                        <allowedExtensions>jpg jpeg gif png</allowedExtensions>
+                        <maxFileSize>4194304</maxFileSize>
+                        <uploaderConfig>
+                            <param xsi:type="string" name="url">pagebuilder/contenttype/image_upload</param>
+                        </uploaderConfig>
+                        <previewTmpl>Magento_PageBuilder/form/element/uploader/preview</previewTmpl>
+                    </settings>
+                </imageUploader>
+            </formElements>
+        </field>
+        <field name="visual_content_video_placeholder_url" sortOrder="60" formElement="input">
+            <settings>
+                <label translate="true">Placeholder URL</label>
+                <dataType>text</dataType>
+                <dataScope>visual_content_video_placeholder_url</dataScope>
+                <visible>false</visible>
+                <imports>
+                    <link name="visible">${$.parentName}.visual_type:videoVisible</link>
+                </imports>
+                <notice translate="true">Will only be shown if placeholder type is URL</notice>
+            </settings>
         </field>
     </fieldset>
 </form>

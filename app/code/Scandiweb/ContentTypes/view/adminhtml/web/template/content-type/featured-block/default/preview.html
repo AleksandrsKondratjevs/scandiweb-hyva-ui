@@ -29,9 +29,15 @@
      </div>
      <div class="featured-block-visual"
           data-bind="css: { 'featured-block-visual-right': data.main.attributes().visual_content_position === 'right' }">
-          <img
-               data-bind="attr: { src: data.main.attributes().src }" />
-
+          <div if="data.main.attributes().visual_type !== 'video'">
+               <img
+                    data-bind="attr: { src: data.main.attributes().src }" />
+          </div>
+          <div if="data.main.attributes().visual_type !== 'image'">
+               <video style="width: 100%;" controls="true" data-bind="attr: { poster: data.main.attributes().placeholder_type === 'uploader' ? data.main.attributes().placeholder_src : data.main.attributes().placeholder_url }">
+                    <source data-bind="attr: { src: data.main.attributes().visual_content_vid }" />
+                </video>
+          </div>
      </div>
      <render args="
          getOptions().template" />

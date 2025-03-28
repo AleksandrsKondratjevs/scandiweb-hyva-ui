@@ -43,7 +43,12 @@
                         <attribute name="second_cta_link" source="second_cta_link" />
                         <attribute name="second_cta_type" source="second_cta_type"/>
                         <attribute name="visual_content_position" source="visual_content_position" />
+                        <attribute name="visual_type" source="visual_type"/>
                         <attribute name="visual_content_img" source="src" converter="Magento_PageBuilder/js/converter/attribute/src" preview_converter="Magento_PageBuilder/js/converter/attribute/preview/src"/>
+                        <attribute name="visual_content_vid" source="visual_content_vid" />
+                        <attribute name="placeholder_type" source="placeholder_type"/>
+                        <attribute name="visual_content_video_placeholder" source="placeholder_src" converter="Magento_PageBuilder/js/converter/attribute/src" preview_converter="Magento_PageBuilder/js/converter/attribute/preview/src"/>
+                        <attribute name="visual_content_video_placeholder_url" source="placeholder_url"/>
                     </element>
                     <element name="block_directive">
                         <html name="block_directive" converter="Magento_PageBuilder/js/converter/html/tag-escaper" />

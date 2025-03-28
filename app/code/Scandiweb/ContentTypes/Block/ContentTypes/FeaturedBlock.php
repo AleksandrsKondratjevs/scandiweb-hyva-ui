@@ -39,14 +39,15 @@ class FeaturedBlock extends Template implements BlockInterface
 
     public function getImage()
     {
-        $img = $this->getData('visual_content_img');
+        $visualConfigName = $this->getData('visual_type') === 'image' ? 'visual_content_img' : 'visual_content_video_placeholder';
+        $img = $this->getData($visualConfigName);
+
+        $img = str_replace('&amp;quote;', '"', $img);
+        $img = $this->serializer->unserialize($img);
 
         if (!$img) {
             return null;
         }
-
-        $img = str_replace('&amp;quote;', '"', $img);
-        $img = $this->serializer->unserialize($img);
 
         return [
             'url' => $img[0]['url'],
