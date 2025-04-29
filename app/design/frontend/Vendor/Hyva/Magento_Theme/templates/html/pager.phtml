@@ -230,7 +230,7 @@ $pagerItemBtnClass = $pagerItemClass
                 ->setTemplate('Hyva_Theme::ui/dropdown.phtml')
                 ->setData('options', $selectOptions)
                 ->setData('default', $currentLimit)
-                ->setData('on_change', "location.href = selectedOptionValue, console.log('wtff ****')")
+                ->setData('on_change', "location.href = selectedOptionValue")
                 ->toHtml();
             ?>
         </div>
